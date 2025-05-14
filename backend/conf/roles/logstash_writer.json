@@ -1,0 +1,11 @@
+{
+  "logstash_writer": {
+    "cluster": ["manage_index_templates", "monitor"],
+    "indices": [
+      {
+        "names": ["courses*"],
+        "privileges": ["create_index", "write", "manage"]
+      }
+    ]
+  }
+}

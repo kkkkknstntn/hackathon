@@ -1,0 +1,101 @@
+server:
+  port: 8080
+
+s3:
+  accessKeyId: minioadmin
+  secretAccessKey: minioadmin
+  url: http://localhost:9000
+  region: us-east-1
+  bucket: bucket
+logging:
+  level:
+    org.springdoc: DEBUG
+    org.springframework: DEBUG
+    ru.dictionary: DEBUG
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: alpha
+    tags-sorter: alpha
+    doc-expansion: none
+  api-docs:
+    path: /v3/api-docs
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
+  cache:
+    disabled: true
+
+
+jwt:
+  access-token-key: '{"kty":"oct","k":"hi7S5RX5ZRZooHA0RKGctZ-KtR9FoESgCnH-3BNg5XI"}'
+  refresh-token-key: '{"kty":"oct","k":"956PBFst1FguLr5irJD-aQ"}'
+
+spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  session:
+    cookie:
+      same-site: none
+      secure: true
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+  application:
+    name: backend
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/dict_db
+    username: postgres
+    password: postgres
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    database: postgresql
+  data:
+    elasticsearch:
+      repositories:
+        enabled: true
+    redis:
+      host: localhost
+      port: 6379
+  elasticsearch:
+    uris: http://localhost:9200
+    username: elastic
+    password: elastic_password
+  cache:
+    type: redis
+    redis:
+      time-to-live: 600000
+  mail:
+    host: smtp.yandex.ru
+    port: 465
+    username: "doedating@yandex.ru"
+    password: "mrzvlstuwsgocmue"
+    test-connection: true
+    protocol: smtps
+    properties:
+      mail:
+        smtp:
+          auth: true
+          ssl:
+            enable: true
+          starttls:
+            enable: true
+          connectiontimeout: 5000
+          timeout: 3000
+          writetimeout: 5000
+emailServiceImplementation: "userUpdater"
+mailing:
+  activation-url: http://localhost:5173/activate-account
+  email-address-sender: "doedating@yandex.ru"
+  activation-token-expiration: 7200
+
+elasticsearch:
+  index:
+    auto-create: true

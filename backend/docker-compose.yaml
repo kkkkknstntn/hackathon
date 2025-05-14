@@ -1,0 +1,131 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: hackaton_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: hackaton_db
+    volumes:
+      - pgdata_hacaton:/var/lib/postgresql/data
+    networks:
+      - app-network
+    ports:
+      - '5430:5432'
+  minio:
+    image: minio/minio
+    entrypoint: sh
+    command: >
+      -c 'mkdir -p /data 
+      && minio server /data'
+    ports:
+      - 9000:9000
+      - 9001:9001
+    networks:
+      - app-network
+    environment:
+      MINIO_ROOT_USER: 'minioadmin'
+      MINIO_ROOT_PASSWORD: 'minioadmin'
+      MINIO_ADDRESS: ':9000'
+      MINIO_CONSOLE_ADDRESS: ':9001'
+
+#  elasticsearch:
+#    image: elasticsearch:8.17.1
+#    container_name: elasticsearch
+#    environment:
+#      - xpack.security.http.ssl.enabled=false
+#      - xpack.security.roles.file.url=file:///usr/share/elasticsearch/config/roles/*.json # Активиру
+#      - discovery.type=single-node
+#      - ES_JAVA_OPTS=-Xms2g -Xmx2g
+#      - xpack.security.enabled=true
+#      - ELASTIC_PASSWORD=elastic_password
+#      - bootstrap.memory_lock=true
+#    ulimits:
+#      memlock:
+#        soft: -1
+#        hard: -1
+#    volumes:
+#      - .conf/roles:/usr/share/elasticsearch/config/roles
+#      - elasticsearch_data:/usr/share/elasticsearch/data
+#    ports:
+#      - '9200:9200'
+#      - '9300:9300'
+#    networks:
+#      - app-network
+#    healthcheck:
+#      test:
+#        [
+#          'CMD-SHELL',
+#          'curl -u elastic:elastic_password -f http://localhost:9200/_cluster/health || exit 1',
+#        ]
+#      interval: 10s
+#      timeout: 30s
+#      retries: 10
+#
+#  kibana:
+#    image: kibana:8.17.1
+#    logging:
+#      driver: "json-file"
+#      options:
+#        max-size: "100m"
+#        max-file: "3"
+#    container_name: kibana
+#    ports:
+#      - "5601:5601"
+#    expose:
+#      - "5601"
+#    environment:
+#      ELASTICSEARCH_URL: http://elasticsearch:9200
+#      ELASTICSEARCH_HOSTS: http://elasticsearch:9200
+#      ELASTICSEARCH_USERNAME: kibana_system
+#      ELASTICSEARCH_PASSWORD: kibana_password
+#    networks:
+#      - app-network
+#  logstash:
+#    user: root
+#    image: logstash:8.17.1
+#    logging:
+#      driver: "json-file"
+#      options:
+#        max-size: "100m"
+#        max-file: "3"
+#    ports:
+#      - "5044:5044"
+#    depends_on:
+#      - postgres
+#      - elasticsearch
+#    environment:
+#      - xpack.monitoring.enabled=true
+#      - xpack.monitoring.elasticsearch.username=elastic
+#      - xpack.monitoring.elasticsearch.password=elastic_password
+#    volumes:
+#      - ./conf/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+#      - logstash_data:/usr/share/logstash/data
+#      - ./conf/postgresql-42.6.0.jar:/usr/share/logstash/postgresql-42.6.0.jar
+#      - ./conf/courses-template.json:/usr/share/logstash/templates/courses-template.json
+#    networks:
+#      - app-network
+  redis:
+    image: redis:alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - app-network
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 5s
+      timeout: 3s
+      retries: 3
+
+volumes:
+  pgdata_hacaton:
+  elasticsearch_data:
+  logstash_data:
+  redis_data:
+
+networks:
+  app-network:
+    driver: bridge
