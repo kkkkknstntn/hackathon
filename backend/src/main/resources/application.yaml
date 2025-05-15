@@ -46,7 +46,7 @@ spring:
     name: backend
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/dict_db
+    url: jdbc:postgresql://hackaton_db:5430/postgres
     username: postgres
     password: postgres
   jpa:
