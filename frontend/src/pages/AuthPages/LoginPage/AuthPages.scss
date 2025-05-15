@@ -1,0 +1,23 @@
+.auth-page {
+	height: 100vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: #f0f2f5;
+
+	.auth-card {
+		width: 400px;
+		border-radius: 8px;
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+		.ant-card-head {
+			text-align: center;
+			font-size: 1.5rem;
+		}
+
+		.auth-link {
+			margin-top: 16px;
+			text-align: center;
+		}
+	}
+}
