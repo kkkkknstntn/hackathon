@@ -1,5 +1,6 @@
 package org.ru.backend.service.impl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.ru.backend.enums.BusinessErrorCodes;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.io.IOException;
@@ -50,6 +52,23 @@ public class S3ServiceImpl implements S3Service {
                     BusinessErrorCodes.FILE_UPLOAD_FAILED,
                     "Failed to upload file: " + file.getOriginalFilename()
             );
+        }
+    }
+
+    @Override
+    public void deleteFile(String objectKey) {
+        try {
+            log.info("Deleting file with object key: {}", objectKey);
+            DeleteObjectRequest deleteRequest = DeleteObjectRequest.builder()
+                    .bucket(bucketName)
+                    .key(objectKey)
+                    .build();
+
+            s3Client.deleteObject(deleteRequest);
+            log.info("Successfully deleted file with object key: {}", objectKey);
+        } catch (Exception e) {
+            log.error("File deletion failed for object key: {}", objectKey, e);
+            throw new RuntimeException("Failed to delete file: " + objectKey, e);
         }
     }
 }

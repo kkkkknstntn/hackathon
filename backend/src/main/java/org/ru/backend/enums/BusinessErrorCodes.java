@@ -31,7 +31,8 @@ public enum BusinessErrorCodes {
     TOKEN_ALREADY_USED(4008, HttpStatus.BAD_REQUEST, "Token has already been used"),
     INTERNAL_SERVER_ERROR(5000, HttpStatus.INTERNAL_SERVER_ERROR, "Internal server error"),
     SEARCH_FAILED(4009, HttpStatus.BAD_REQUEST , "Search failed" ),
-    NOT_ENOUGH_WORDS(4010, HttpStatus.BAD_REQUEST , "Not enough words"),;
+    EXTERNAL_SERVICE_ERROR(5002, HttpStatus.BAD_GATEWAY, "The external service returned an error"),
+    NOT_ENOUGH_WORDS(4010, HttpStatus.BAD_REQUEST , "Not enough words");
 
 
 

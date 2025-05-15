@@ -42,7 +42,10 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter-data-redis"
     implementation "org.springframework.boot:spring-boot-starter-security"
     implementation "org.springframework.boot:spring-boot-starter-web"
-    implementation "org.springframework.boot:spring-boot-starter-validation" // Добавлено для валидации
+    implementation "org.springframework.boot:spring-boot-starter-validation"
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+    implementation platform('org.springframework.cloud:spring-cloud-dependencies:2020.0.4')
+
 
     runtimeOnly "org.postgresql:postgresql:${postgresqlVersion}"
 

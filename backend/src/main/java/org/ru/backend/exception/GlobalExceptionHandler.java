@@ -1,5 +1,6 @@
 package org.ru.backend.exception;
 
+import feign.FeignException;
 import org.ru.backend.enums.BusinessErrorCodes;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -59,6 +60,19 @@ public class GlobalExceptionHandler {
             message.append(error.getDefaultMessage()).append("; ");
         });
         return buildErrorResponse(code, message.toString());
+    }
+
+    @ExceptionHandler(FeignException.class)
+    public ResponseEntity<ExceptionResponse> handleFeignException(FeignException ex) {
+        String errorMessage = ex.getMessage();
+        String responseBody = ex.contentUTF8();
+        int statusCode = ex.status();
+
+        BusinessErrorCodes code = BusinessErrorCodes.EXTERNAL_SERVICE_ERROR;
+
+        String errorDetails = "Feign exception: " + errorMessage + ". Response: " + responseBody;
+
+        return buildErrorResponse(code, errorDetails);
     }
 
     private ResponseEntity<ExceptionResponse> buildErrorResponse(BusinessErrorCodes code, String message) {
