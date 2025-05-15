@@ -5,34 +5,47 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: hackaton_db
+      POSTGRES_DB: postgres
     volumes:
       - pgdata_hacaton:/var/lib/postgresql/data
     networks:
       - app-network
     ports:
-      - '5430:5432'
-  minio:
-    image: minio/minio
-    entrypoint: sh
-    command: >
-      -c '
-        mkdir -p /data
-        && minio server /data &
-        && sleep 10
-        && mc alias set myminio http://localhost:9000 minioadmin minioadmin
-        && mc mb myminio/bucket
-        && fg'
+      - '5430:5430'
+  file-storage:
+    image: bitnami/minio:latest
+    container_name: s3-file-storage
     ports:
-      - 9000:9000
-      - 9001:9001
-    networks:
-      - app-network
+      - "9000:9000" #api
+      - "9001:9001" #web-console
     environment:
-      MINIO_ROOT_USER: 'minioadmin'
-      MINIO_ROOT_PASSWORD: 'minioadmin'
-      MINIO_ADDRESS: ':9000'
-      MINIO_CONSOLE_ADDRESS: ':9001'
+      - MINIO_DEFAULT_BUCKETS=${MINIO_BUCKET_NAME}
+      - MINIO_SERVER_URL=${MINIO_SERVER_URL}
+      - MINIO_BROWSER=on
+      - MINIO_ROOT_USER=${MINIO_ROOT_USER}
+      - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
+      - MINIO_SECURE=false
+    volumes:
+      - ./data/minio-persistence:/data
+      - ./data/minio-persistence/certs:/certs
+  backend:
+    image: backend:latest
+    build:
+      context: /backend
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    environment:
+      - SERVER_PORT=${SERVER_PORT}
+      - SPRING_DATASOURCE_URL=${DB_URL}
+      - MINIO_SERVER_URL=${MINIO_SERVER_URL}
+      - MINIO_ROOT_USER=${MINIO_ROOT_USER}
+      - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
+      - MINIO_BUCKET_NAME=${MINIO_BUCKET_NAME}
+      - MINIO_SECURE=false
+
 
 
 
