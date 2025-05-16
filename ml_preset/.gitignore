@@ -1,2 +1,4 @@
 .error-hack-env
 .hack-env-faiss
+/download_logs/latest
+download_logs
