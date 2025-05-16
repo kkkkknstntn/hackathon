@@ -1,0 +1,49 @@
+// MainPage.scss
+.main-page {
+	padding: 24px;
+	max-width: 1400px;
+	margin: 0 auto;
+
+	.header-card {
+		text-align: center;
+
+		.main-title {
+			margin-bottom: 8px;
+		}
+	}
+
+	.metric-card {
+		&,
+		&.warning,
+		&.success {
+			text-align: center;
+			border-radius: 8px;
+		}
+
+		&.warning {
+			border: 1px;
+		}
+
+		&.success {
+			border: 1px;
+		}
+
+		.metric-value {
+			font-size: 32px;
+			display: block;
+			margin: 16px 0;
+		}
+	}
+
+	.code-example {
+		.code-block {
+			padding: 16px;
+			border-radius: 4px;
+			margin: 12px 0;
+		}
+	}
+
+	.ant-divider {
+		font-size: 18px;
+	}
+}

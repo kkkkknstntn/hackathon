@@ -1,0 +1,37 @@
+.main-layout {
+	height: 100vh;
+
+	.logo {
+		height: 64px;
+		line-height: 64px;
+		padding: 0 24px;
+		font-size: 20px;
+		font-weight: 700;
+		border-bottom: 1px;
+	}
+
+	.header {
+		padding: 0;
+		border-bottom: 1px;
+	}
+
+	.content {
+		flex: 1; // Занимаем все доступное пространство
+		padding: 24px;
+		display: flex;
+		flex-direction: column;
+		min-height: 0; // Фикс для корректной работы flex вложенных элементов
+
+		&-wrapper {
+			flex: 1;
+			position: relative;
+			overflow: auto; // Добавляем прокрутку при необходимости
+			min-height: min-content; // Минимальная высота по содержимому
+
+			// Опционально: добавить отступы для контента
+			> * {
+				padding: 16px;
+			}
+		}
+	}
+}
