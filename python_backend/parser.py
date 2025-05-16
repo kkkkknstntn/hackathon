@@ -69,6 +69,30 @@ def parse_logs_from_directory(directory, es_client, index_name, redis_client):
         for future in futures:
             future.result()
 
+def extract_dates_from_log(log_content):
+    """Извлекает первую и последнюю дату из содержимого лога в нужном формате."""
+    # Регулярное выражение для извлечения даты и времени в формате 'May 16 02:15:35'
+    date_pattern = r'\w{3} \d{1,2} \d{2}:\d{2}:\d{2}'
+    dates = re.findall(date_pattern, log_content)
+
+    if dates:
+        # Первая дата из лога
+        first_date_str = dates[0]
+        # Последняя дата из лога
+        last_date_str = dates[-1]
+
+        # Преобразуем строки в datetime объекты
+        current_year = datetime.now().year  # Для корректного парсинга в текущий год
+        first_date = datetime.strptime(f"{first_date_str} {current_year}", '%b %d %H:%M:%S %Y')
+        last_date = datetime.strptime(f"{last_date_str} {current_year}", '%b %d %H:%M:%S %Y')
+
+        # Преобразуем datetime в ISO формат
+        first_date_iso = first_date.isoformat()
+        last_date_iso = last_date.isoformat()
+
+        return first_date_iso, last_date_iso
+    return None, None
+
 def process_file(file_path, file, es_client, index_name, redis_client):
     log_content = read_log_from_file(file_path)
     timestamp = datetime.now().isoformat()
@@ -94,6 +118,9 @@ def process_file(file_path, file, es_client, index_name, redis_client):
         group = "Неизвестно"
         depends = []
 
+    # Извлекаем первую и последнюю даты из лога
+    first_date, last_date = extract_dates_from_log(log_content)
+
     document = {
         "log": log_content,
         "timestamp": timestamp,
@@ -104,6 +131,8 @@ def process_file(file_path, file, es_client, index_name, redis_client):
         "package_description": description,
         "package_group": group,
         "package_dependencies": depends,
+        "first_log_date": first_date,  # Первая дата
+        "last_log_date": last_date,    # Последняя дата
     }
 
     try:

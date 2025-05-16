@@ -32,15 +32,17 @@ public class LogController {
      */
     @GetMapping("/searchLogs")
     public SearchLogsResponseDTO searchLogs(@RequestParam(required = false) String query,
-                                         @RequestParam(required = false) String programmingLanguage,
-                                         @RequestParam(required = false) String errors,
-                                         @RequestParam(required = false) String packageField,
-                                         @RequestParam(required = false) String packageDependencies,
-                                         @RequestParam(required = false) String packageDescription,
-                                         @RequestParam(required = false) String packageGroup,
-                                         @RequestParam(required = false) String packageSummary,
-                                         @RequestParam(required = false) String log) {
+                                            @RequestParam(required = false) String programmingLanguage,
+                                            @RequestParam(required = false) String errors,
+                                            @RequestParam(required = false) String packageField,
+                                            @RequestParam(required = false) String packageDependencies,
+                                            @RequestParam(required = false) String packageDescription,
+                                            @RequestParam(required = false) String packageGroup,
+                                            @RequestParam(required = false) String packageSummary,
+                                            @RequestParam(required = false) String log,
+                                            @RequestParam(required = false) String date) {
         return logService.searchLogsWithPackages(query, programmingLanguage, errors, packageField,
-                packageDependencies, packageDescription, packageGroup, packageSummary, log);
+                packageDependencies, packageDescription, packageGroup, packageSummary, log, date);
     }
+
 }

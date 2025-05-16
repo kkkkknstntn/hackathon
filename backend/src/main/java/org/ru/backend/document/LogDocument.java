@@ -46,6 +46,13 @@ public class LogDocument {
     @Field(type = FieldType.Text)
     private String log;
 
+    @Field(type = FieldType.Date)
+    private String first_log_date;
+
+    @Field(type = FieldType.Date)
+    private String last_log_date;
+
+
     // Вложенный класс для ошибок
     @Data
     @NoArgsConstructor

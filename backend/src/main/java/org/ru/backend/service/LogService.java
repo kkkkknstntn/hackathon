@@ -30,17 +30,18 @@ public class LogService {
      * @return Ответ с логами и списком уникальных пакетов.
      */
     public SearchLogsResponseDTO searchLogsWithPackages(String query, String programmingLanguage, String errors, String packageField,
-                                                     String packageDependencies, String packageDescription, String packageGroup,
-                                                     String packageSummary, String log) {
-        // Получаем логи с заданными фильтрами
+                                                        String packageDependencies, String packageDescription, String packageGroup,
+                                                        String packageSummary, String log, String date) {
+        // Получаем логи с заданными фильтрами, включая фильтрацию по дате
         List<LogDocument> logs = logDocumentRepository.searchLogs(query, programmingLanguage, errors, packageField,
-                packageDependencies, packageDescription, packageGroup, packageSummary, log);
+                packageDependencies, packageDescription, packageGroup, packageSummary, log, date);
 
         // Получаем список уникальных пакетов через агрегацию
         List<String> uniquePackages = getUniquePackages(logs);
 
         return new SearchLogsResponseDTO(uniquePackages, logs);
     }
+
     /**
      * Получение уникальных пакетов из списка логов.
      *
