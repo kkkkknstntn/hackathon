@@ -1,0 +1,137 @@
+.filters-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 24px;
+  width: 100%;
+
+  .ant-space {
+    width: 100%;
+  }
+
+  .filter-button {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    height: auto;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+  }
+
+  /* Основные стили DatePicker */
+  .ant-picker {
+    border-radius: 4px;
+    height: 32px;
+    
+    &-input > input {
+      font-family: monospace;
+      font-size: 13px; /* Добавил размер шрифта */
+    }
+  }
+
+  /* Кастомный DatePicker */
+  .date-time-picker {
+    width: 200px;
+
+    @media (max-width: 768px) {
+      width: 100%;
+    }
+  }
+
+  /* Выпадающее меню календаря - объединил дублирующиеся стили */
+  .date-picker-dropdown,
+  .custom-datepicker-dropdown {
+    /* Общие стили для обоих классов */
+    .ant-picker-panel {
+      width: 100%;
+      min-width: 280px;
+    }
+
+    .ant-picker-header,
+    .ant-picker-content th,
+    .ant-picker-cell {
+      font-size: 12px !important;
+    }
+
+    .ant-picker-cell {
+      padding: 0;
+      min-width: 24px;
+      height: 24px;
+    }
+
+    .ant-picker-content {
+      border-spacing: 0;
+      border-collapse: separate;
+
+      th, td {
+        padding: 0 2px;
+      }
+    }
+
+    /* Мобильные стили */
+    @media (max-width: 768px) {
+      transform: scale(0.85) !important;
+      transform-origin: top left !important;
+
+      .ant-picker-panel {
+        width: 260px;
+      }
+
+      .ant-picker-header {
+        padding: 0 4px;
+      }
+
+      .ant-picker-time-panel {
+        width: 90px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      transform: scale(0.75) !important;
+
+      .ant-picker-panel {
+        width: 240px;
+      }
+
+      .ant-picker-cell {
+        min-width: 20px;
+        height: 20px;
+      }
+    }
+
+    @media (max-width: 375px) {
+      transform: scale(0.65) !important;
+    }
+  }
+
+  /* Медиа-запросы для контейнера */
+  @media (max-width: 768px) {
+    flex-direction: row;
+    gap: 8px;
+
+    .ant-space {
+      gap: 8px !important;
+    }
+    
+    .filter-button {
+      flex: 1 1 calc(50% - 8px);
+      min-width: 0;
+      font-size: 1.9vw;
+      padding: 6px 8px;
+    }
+
+    .ant-picker {
+      width: 100% !important;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .filter-button {
+      font-size: 3.5vw;
+      flex: 1 1 100%;
+    }
+  }
+}

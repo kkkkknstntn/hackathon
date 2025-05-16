@@ -1,111 +1,110 @@
-import { CodeOutlined, WarningOutlined } from '@ant-design/icons'
-import { Alert, Card, Col, Divider, Row, Space, Typography } from 'antd'
-import './MainPage.scss'
-
-const { Title, Text, Paragraph } = Typography
+import { useState, useEffect } from 'react';
+import { Row, Col } from 'antd';
+import { Header } from './components/Header/Header';
+import { Filters } from './components/FilterButtons/FilterButtons';
+import { LogsList } from './components/LogsList/LogsList';
+import { LogDetails } from './components/LogDetails/LogDetails';
+import './MainPage.scss';
 
 export const MainPage = () => {
-	return (
-		<div className='main-page'>
-			<Row gutter={[16, 16]}>
-				<Col span={24}>
-					<Card className='header-card'>
-						<Title level={1} className='main-title'>
-							Error Logger Analyser Dashboard
-						</Title>
-						<Text type='secondary'>Система мониторинга и анализа ошибок</Text>
-					</Card>
-				</Col>
+  const [selectedLog, setSelectedLog] = useState<any>(null);
+  const [logs, setLogs] = useState<any[]>([]);
+  const [filters, setFilters] = useState({
+    programmingLanguage: null,
+    packageName: null,
+    errorType: null
+  });
+  const [visibleFilters, setVisibleFilters] = useState({
+    languages: false,
+    packages: false,
+    errors: false
+  });
 
-				<Col span={24}>
-					<Divider orientation='left'>Основные показатели</Divider>
-				</Col>
+  const programmingLanguages = ['C++', 'PHP', 'C#'];
+  const packagesByLanguage = {
+    'C++': ['perl-YAML-PP-LibYAML', 'perl-YAML-PP-Ref', 'pgagent', 'plots'],
+    'PHP': ['laravel/framework', 'symfony/http-foundation', 'guzzlehttp/guzzle'],
+    'C#': ['Newtonsoft.Json', 'NUnit', 'Dapper']
+  };
+  const errorTypes = ['composer_error', 'rpm_error', 'command_nonzero', 'syntax_error', 'dependency_error'];
 
-				<Col xs={24} md={12} lg={8}>
-					<Card className='metric-card'>
-						<Title level={4}>Всего ошибок</Title>
-						<Text strong className='metric-value'>
-							1,234
-						</Text>
-						<Paragraph type='secondary'>За последние 24 часа</Paragraph>
-					</Card>
-				</Col>
+  useEffect(() => {
+    const mockLogs = [
+      {
+        log: "Пример лога ошибки...",
+        programming_language: "C++",
+        errors: ["composer_error", "rpm_error"],
+        package_field: "perl-YAML-PP-LibYAML-0.005-alt2",
+        timestamp: "2025-05-16T17:04:45.303723",
+        dependencies: [
+          { name: "perl-YAML-PP", status: "ok" },
+          { name: "perl-LibYAML", status: "error" },
+          { name: "perl-Base", status: "ok" }
+        ],
+        packageInfo: {
+          version: "0.005-alt2",
+          lastUpdated: "2025-05-16",
+          author: "John Doe",
+          license: "MIT"
+        }
+      }
+    ];
+    setLogs(mockLogs);
+  }, []);
 
-				<Col xs={24} md={12} lg={8}>
-					<Card className='metric-card warning'>
-						<Title level={4}>Критические ошибки</Title>
-						<Text strong className='metric-value warning-text'>
-							56
-						</Text>
-						<Paragraph type='secondary'>
-							Требуют немедленного внимания
-						</Paragraph>
-					</Card>
-				</Col>
+  const handleLogSelect = (log: any) => {
+    setSelectedLog(log);
+  };
 
-				<Col xs={24} lg={8}>
-					<Card className='metric-card success'>
-						<Title level={4}>Решено проблем</Title>
-						<Text strong className='metric-value success-text'>
-							890
-						</Text>
-						<Paragraph type='secondary'>За текущий месяц</Paragraph>
-					</Card>
-				</Col>
+  const handleDateTimeChange = (dateTime: string | null) => {
+    console.log('Selected datetime:', dateTime);
+    // Здесь можно добавить логику фильтрации по дате
+    // Например:
+    // setFilters(prev => ({...prev, dateTime}));
+  };
 
-				<Col span={24}>
-					<Divider orientation='left'>Последние события</Divider>
-				</Col>
+  const handleFilterSelect = (type: string, value: string) => {
+    setFilters(prev => ({
+      ...prev,
+      [type]: prev[type as keyof typeof prev] === value ? null : value
+    }));
+    setVisibleFilters(prev => ({ ...prev, [type]: false }));
+  };
 
-				<Col span={24}>
-					<Card>
-						<Space direction='vertical' size={16} style={{ width: '100%' }}>
-							<Alert
-								message='Ошибка авторизации'
-								description='Неверные учетные данные в модуле пользователей'
-								type='error'
-								showIcon
-								icon={<WarningOutlined />}
-							/>
-							<Alert
-								message='Предупреждение системы'
-								description='Высокая нагрузка на сервер БД'
-								type='warning'
-								showIcon
-							/>
-							<Alert
-								message='Информационное сообщение'
-								description='Обновление v1.2.3 успешно установлено'
-								type='info'
-								showIcon
-							/>
-						</Space>
-					</Card>
-				</Col>
+  const toggleFilter = (filter: string) => {
+    setVisibleFilters(prev => ({
+      ...prev,
+      [filter]: !prev[filter as keyof typeof prev]
+    }));
+  };
 
-				<Col span={24}>
-					<Divider orientation='left'>Пример кода</Divider>
-				</Col>
+  return (
+    <div className='main-page'>
+      <Header />
+      
+      <Filters
+        filters={filters}
+        visibleFilters={visibleFilters}
+        programmingLanguages={programmingLanguages}
+        packagesByLanguage={packagesByLanguage}
+        errorTypes={errorTypes}
+        toggleFilter={toggleFilter}
+        handleFilterSelect={handleFilterSelect}
+		handleDateTimeChange={handleDateTimeChange}
+      />
 
-				<Col span={24}>
-					<Card className='code-example'>
-						<Paragraph>
-							<Text strong>Пример обработки ошибки:</Text>
-							<pre className='code-block'>
-								<CodeOutlined />{' '}
-								{`
-                try {
-                  fetchData();
-                } catch (error) {
-                  logger.error('API Error:', error);
-                  showNotification('Ошибка загрузки данных');
-                }
-                `}
-							</pre>
-						</Paragraph>
-					</Card>
-				</Col>
-			</Row>
-		</div>
-	)
-}
+      <Row gutter={[16, 16]}>
+        <Col xs={24} md={12}>
+          <LogsList 
+            logs={logs} 
+            selectedLog={selectedLog} 
+            handleLogSelect={handleLogSelect} 
+          />
+        </Col>
+        <Col xs={24} md={12}>
+          <LogDetails selectedLog={selectedLog} />
+        </Col>
+      </Row>
+    </div>
+  );
+};

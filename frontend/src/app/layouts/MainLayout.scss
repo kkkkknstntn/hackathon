@@ -1,37 +1,162 @@
 .main-layout {
-	height: 100vh;
+  min-height: 100vh;
+  width: 100%;
+  overflow-x: hidden;
 
-	.logo {
-		height: 64px;
-		line-height: 64px;
-		padding: 0 24px;
-		font-size: 20px;
-		font-weight: 700;
-		border-bottom: 1px;
-	}
+  .main-header {
+    position: sticky;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
-	.header {
-		padding: 0;
-		border-bottom: 1px;
-	}
+    .header-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      width: 100%;
+    }
 
-	.content {
-		flex: 1; // Занимаем все доступное пространство
-		padding: 24px;
-		display: flex;
-		flex-direction: column;
-		min-height: 0; // Фикс для корректной работы flex вложенных элементов
+    .logo-wrapper {
+      display: flex;
+      flex-direction: column;
+      min-width: 120px;
 
-		&-wrapper {
-			flex: 1;
-			position: relative;
-			overflow: auto; // Добавляем прокрутку при необходимости
-			min-height: min-content; // Минимальная высота по содержимому
+      .logo-full {
+        font-size: 18px;
+        font-weight: bold;
+        line-height: 1.2;
+        white-space: nowrap;
+      }
 
-			// Опционально: добавить отступы для контента
-			> * {
-				padding: 16px;
-			}
-		}
-	}
+      .logo-compact {
+        display: none;
+        flex-direction: column;
+        line-height: 1.2;
+        
+        div {
+          font-size: 16px;
+          font-weight: bold;
+          white-space: nowrap;
+        }
+      }
+    }
+
+    .controls-group {
+      display: flex;
+      align-items: center;
+      flex-wrap: nowrap;
+      justify-content: flex-end;
+      gap: 8px;
+      flex: 1;
+
+      .search-input {
+        width: 30vw;
+        flex: 1;
+      }
+
+      .ant-btn {
+        white-space: nowrap;
+        
+        .btn-text {
+          display: inline-block;
+        }
+      }
+    }
+  }
+
+  .main-content {
+    padding: 24px;
+  }
+}
+
+@media (max-width: 992px) {
+  .main-layout {
+    .main-header {
+
+      .logo-wrapper {
+        .logo-full {
+          display: none;
+        }
+        .logo-compact {
+          display: flex;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .main-layout {
+    .main-header {
+
+      .logo-wrapper {
+        .logo-compact div {
+          font-size: 14px;
+        }
+      }
+
+      .controls-group {
+        gap: 6px;
+        
+        .ant-btn {
+          padding: 4px 8px;
+          font-size: 12px;
+        }
+      }
+    }
+    
+    .main-content {
+      padding: 16px;
+    }
+  }
+}
+
+@media (max-width: 576px) {
+  .main-layout {
+    .main-header {
+      flex-wrap: wrap;
+
+      .logo-wrapper {
+        min-width: 80px;
+        
+        .logo-compact div {
+          font-size: 12px;
+          line-height: 1.1;
+        }
+      }
+
+      .controls-group {
+        .search-input {
+          min-width: 120px;
+          width: 100%;
+          max-width: none;
+        }
+
+        .ant-btn {
+          padding: 4px 6px;
+          min-width: auto;
+          
+          .btn-text {
+            display: none;
+          }
+        }
+      }
+    }
+    
+    .main-content {
+      padding: 12px;
+    }
+  }
+}
+
+@media (max-width: 400px) {
+  .main-layout {
+    .main-header {
+      .logo-wrapper {
+        .logo-compact div {
+          font-size: 11px;
+        }
+      }
+    }
+  }
 }
