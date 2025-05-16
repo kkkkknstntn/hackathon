@@ -30,6 +30,26 @@ export const lightTheme = {
 		borderRadius: 4,
 		fontFamily: `'JetBrains Mono', 'Courier New', monospace`,
 		controlHeight: 32,
+
+		colorErrorBg: '#fff2f0',
+		colorErrorBorder: '#ffccc7',
+		colorErrorText: '#ff4d4f',
+		colorWarningBg: '#fffbe6',
+		colorWarningBorder: '#ffe58f',
+		colorWarningText: '#faad14',
+		colorInfoBg: '#e6f4ff',
+		colorInfoBorder: '#91caff',
+		colorInfoText: '#1890ff',
+		colorSuccessBg: '#f6ffed',
+		colorSuccessBorder: '#b7eb8f',
+		colorSuccessText: '#52c41a',
+	},
+	components: {
+		Layout: {
+			headerBg: '#ffffff',
+			headerColor: '#000000',
+			headerPadding: '0 24px',
+		},
 	},
 }
 
@@ -64,6 +84,40 @@ export const darkTheme = {
 		borderRadius: 6,
 		fontFamily: `'Segoe UI', system-ui, sans-serif`,
 		controlHeight: 40,
+
+		colorErrorBg: '#2a1215',
+		colorErrorBorder: '#58181c',
+		colorErrorText: '#ff7875',
+		colorWarningBg: '#2b1d11',
+		colorWarningBorder: '#593815',
+		colorWarningText: '#ffc53d',
+		colorInfoBg: '#111d2c',
+		colorInfoBorder: '#15345b',
+		colorInfoText: '#69b1ff',
+		colorSuccessBg: '#162312',
+		colorSuccessBorder: '#274916',
+		colorSuccessText: '#95de64',
+	},
+	components: {
+		Input: {
+			activeBorderColor: '#32cd32',
+			hoverBorderColor: '#228b22',
+		},
+		Button: {
+			defaultGhostBorderColor: '#32cd32',
+			defaultGhostColor: '#32cd32',
+		},
+		Alert: {
+			fontSize: 14,
+			borderRadius: 0,
+			paddingBlock: 12,
+			paddingInline: 16,
+		},
+		Card: {
+			colorBgContainer: '#000000',
+			colorBorder: '#32cd32',
+			boxShadow: '0 0 10px rgba(50, 205, 50, 0.3)',
+		},
 	},
 }
 
@@ -99,6 +153,19 @@ export const customTheme = {
 		fontFamily: `'Courier New', 'Lucida Console', monospace`,
 		controlHeight: 36,
 		controlInteractiveSize: 16,
+
+		colorErrorBg: '#1a0000',
+		colorErrorBorder: '#4d0000',
+		colorErrorText: '#ff3333',
+		colorWarningBg: '#1a1a00',
+		colorWarningBorder: '#4d4d00',
+		colorWarningText: '#ffff00',
+		colorInfoBg: '#001a1a',
+		colorInfoBorder: '#004d4d',
+		colorInfoText: '#00ffff',
+		colorSuccessBg: '#001a00',
+		colorSuccessBorder: '#004d00',
+		colorSuccessText: '#00ff00',
 	},
 	components: {
 		Input: {
@@ -108,6 +175,18 @@ export const customTheme = {
 		Button: {
 			defaultGhostBorderColor: '#32cd32',
 			defaultGhostColor: '#32cd32',
+		},
+		Alert: {
+			colorText: '#32cd32',
+			fontSize: 14,
+			borderRadius: 0,
+			paddingBlock: 12,
+			paddingInline: 16,
+		},
+		Card: {
+			colorBgContainer: '#000000',
+			colorBorder: '#32cd32',
+			boxShadow: '0 0 10px rgba(50, 205, 50, 0.3)',
 		},
 	},
 }
