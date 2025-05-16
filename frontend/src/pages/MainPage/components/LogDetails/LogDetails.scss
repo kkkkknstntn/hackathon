@@ -1,0 +1,24 @@
+.log-details-card {
+  height: 100%;
+  min-height: 70vh;
+  margin-bottom: 16px;
+
+  .ant-card-body {
+    padding: 16px;
+  }
+
+  .raw-log {
+    padding: 12px;
+    border-radius: 4px;
+    max-height: 65vh;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-family: monospace;
+    font-size: 0.85rem;
+  }
+
+  @media (max-width: 768px) {
+    min-height: auto;
+  }
+}
