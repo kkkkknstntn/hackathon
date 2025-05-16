@@ -57,6 +57,9 @@ spring:
       hibernate:
         format_sql: true
     database: postgresql
+  redis:
+    host: localhost
+    port: 6379
   data:
     elasticsearch:
       repositories:

@@ -8,6 +8,7 @@ import org.ru.backend.document.LogDocument;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Repository
@@ -118,11 +119,13 @@ public class LogDocumentRepositoryImpl {
 
                                         if (log != null && !log.isEmpty()) {
                                             b.must(sh -> sh
-                                                    .match(m -> m
+                                                    .matchPhrase(m -> m
                                                             .field("log")
-                                                            .query(log)
-                                                    ));
+                                                            .query(log) // Ищем точное вхождение фразы в том же порядке
+                                                    )
+                                            );
                                         }
+
 
                                         // Исправляем фильтрацию по дате: объединяем оба условия через must
                                         if (date != null && !date.isEmpty()) {
