@@ -25,11 +25,18 @@ public class LogDocumentRepositoryImpl {
      * @param programmingLanguage Фильтр по языку программирования.
      * @param errors Фильтр по ошибкам.
      * @param packageField Фильтр по пакету.
+     * @param packageDependencies Фильтр по зависимостям пакетов.
+     * @param packageDescription Фильтр по описанию пакетов.
+     * @param packageGroup Фильтр по группе пакетов.
+     * @param packageSummary Фильтр по сводке пакетов.
+     * @param log Фильтр по содержимому лога.
      * @return Список логов, соответствующих фильтру.
      */
-    public List<LogDocument> searchLogs(String query, String programmingLanguage, String errors, String packageField) {
+    public List<LogDocument> searchLogs(String query, String programmingLanguage, String errors, String packageField,
+                                        String packageDependencies, String packageDescription, String packageGroup,
+                                        String packageSummary, String log) {
         try {
-            // Создаем запрос для поиска логов
+            // Создаем запрос для поиска логов с фильтрами
             SearchResponse<LogDocument> response = elasticsearchClient.search(s -> s
                             .index("logs_index")
                             .query(q -> q
@@ -53,9 +60,17 @@ public class LogDocumentRepositoryImpl {
 
                                         if (errors != null && !errors.isEmpty()) {
                                             b.should(sh -> sh
-                                                    .match(m -> m
-                                                            .field("errors")
-                                                            .query(errors)
+                                                    .nested(n -> n
+                                                            .path("errors")
+                                                            .query(nq -> nq
+                                                                    .bool(bq -> bq
+                                                                            .should(shl -> shl
+                                                                                    .match(m -> m
+                                                                                            .field("errors.full_error")
+                                                                                            .query(errors)
+                                                                                    ))
+                                                                    )
+                                                            )
                                                     ));
                                         }
 
@@ -64,6 +79,46 @@ public class LogDocumentRepositoryImpl {
                                                     .match(m -> m
                                                             .field("package_field")
                                                             .query(packageField)
+                                                    ));
+                                        }
+
+                                        if (packageDependencies != null && !packageDependencies.isEmpty()) {
+                                            b.should(sh -> sh
+                                                    .match(m -> m
+                                                            .field("package_dependencies")
+                                                            .query(packageDependencies)
+                                                    ));
+                                        }
+
+                                        if (packageDescription != null && !packageDescription.isEmpty()) {
+                                            b.should(sh -> sh
+                                                    .match(m -> m
+                                                            .field("package_description")
+                                                            .query(packageDescription)
+                                                    ));
+                                        }
+
+                                        if (packageGroup != null && !packageGroup.isEmpty()) {
+                                            b.should(sh -> sh
+                                                    .match(m -> m
+                                                            .field("package_group")
+                                                            .query(packageGroup)
+                                                    ));
+                                        }
+
+                                        if (packageSummary != null && !packageSummary.isEmpty()) {
+                                            b.should(sh -> sh
+                                                    .match(m -> m
+                                                            .field("package_summary")
+                                                            .query(packageSummary)
+                                                    ));
+                                        }
+
+                                        if (log != null && !log.isEmpty()) {
+                                            b.should(sh -> sh
+                                                    .match(m -> m
+                                                            .field("log")
+                                                            .query(log)
                                                     ));
                                         }
 

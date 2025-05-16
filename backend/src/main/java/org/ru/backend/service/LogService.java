@@ -22,16 +22,25 @@ public class LogService {
      * @param programmingLanguage Фильтр по языку программирования.
      * @param errors Фильтр по ошибкам.
      * @param packageField Фильтр по пакету.
+     * @param packageDependencies Фильтр по зависимостям пакетов.
+     * @param packageDescription Фильтр по описанию пакетов.
+     * @param packageGroup Фильтр по группе пакетов.
+     * @param packageSummary Фильтр по сводке пакетов.
+     * @param log Фильтр по содержимому лога.
      * @return Ответ с логами и списком уникальных пакетов.
      */
-    public SearchLogsResponseDTO searchLogsWithPackages(String query, String programmingLanguage, String errors, String packageField) {
-        List<LogDocument> logs = logDocumentRepository.searchLogs(query, programmingLanguage, errors, packageField);
+    public SearchLogsResponseDTO searchLogsWithPackages(String query, String programmingLanguage, String errors, String packageField,
+                                                     String packageDependencies, String packageDescription, String packageGroup,
+                                                     String packageSummary, String log) {
+        // Получаем логи с заданными фильтрами
+        List<LogDocument> logs = logDocumentRepository.searchLogs(query, programmingLanguage, errors, packageField,
+                packageDependencies, packageDescription, packageGroup, packageSummary, log);
 
+        // Получаем список уникальных пакетов через агрегацию
         List<String> uniquePackages = getUniquePackages(logs);
 
         return new SearchLogsResponseDTO(uniquePackages, logs);
     }
-
     /**
      * Получение уникальных пакетов из списка логов.
      *

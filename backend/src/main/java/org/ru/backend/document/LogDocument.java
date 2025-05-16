@@ -19,18 +19,42 @@ import java.util.List;
 @Document(indexName = "logs_index")
 public class LogDocument {
 
-    @Field(type = FieldType.Text)
-    private String log;
-
     @Field(name = "programming_language", type = FieldType.Text)
     private String programming_language;
 
-    @Field(type = FieldType.Keyword)
-    private List<String> errors;
+    @Field(type = FieldType.Nested) // Используем Nested тип для сложных объектов, как errors
+    private List<Error> errors;
 
     @Field(type = FieldType.Text)
     private String package_field;
 
     @Field(type = FieldType.Date)
     private String timestamp;
+
+    @Field(name = "package_dependencies", type = FieldType.Text)
+    private List<String> package_dependencies;
+
+    @Field(name = "package_description", type = FieldType.Text)
+    private String package_description;
+
+    @Field(name = "package_group", type = FieldType.Text)
+    private String package_group;
+
+    @Field(name = "package_summary", type = FieldType.Text)
+    private String package_summary;
+
+    @Field(type = FieldType.Text)
+    private String log;
+
+    // Вложенный класс для ошибок
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class Error {
+        @Field(type = FieldType.Text)
+        private String full_error;
+
+        @Field(type = FieldType.Text)
+        private String short_name;
+    }
 }

@@ -1,7 +1,7 @@
 httpx>=0.19.0
 torch==2.6.0
 torchvision==0.21.0
-transformers
+transformers~=4.51.3
 asyncpg==0.30.0
 fastapi==0.115.8
 py_eureka_client==0.11.13
@@ -11,4 +11,8 @@ pydantic_core==2.27.2
 python-dotenv==1.0.1
 SQLAlchemy==2.0.37
 uvicorn==0.34.0
-tenacity
+tenacity~=9.1.2
+elasticsearch~=8.17.1
+redis~=6.1.0
+apscheduler~=3.11.0
+requests~=2.32.3
