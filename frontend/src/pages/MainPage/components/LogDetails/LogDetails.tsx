@@ -29,7 +29,6 @@ export const LogDetails = ({ selectedLog }: LogDetailsProps) => {
           <Text strong>Рекомендуемые действия:</Text>
           <ul>
             <li>Проверить зависимости: {selectedLog.package_dependencies.join(', ')}</li>
-            <li>Проверить совместимость с {selectedLog.programming_language}</li>
             <li>Обновить версию пакета</li>
           </ul>
         </TabPane>

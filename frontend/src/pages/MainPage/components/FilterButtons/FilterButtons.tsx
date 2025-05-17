@@ -18,7 +18,7 @@ interface FiltersProps {
   toggleFilter: (filter: string) => void;
   handleFilterSelect: (type: keyof SearchLogsParams, value: string) => void;
   handleDateTimeChange: (date: string | null) => void;
-  handleApplyFilters: () => void; // Новый проп
+  handleApplyFilters: () => void; 
 }
 
 export const Filters = ({
