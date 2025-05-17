@@ -75,29 +75,7 @@ spring:
     type: redis
     redis:
       time-to-live: 600000
-  mail:
-    host: smtp.yandex.ru
-    port: 465
-    username: "doedating@yandex.ru"
-    password: "mrzvlstuwsgocmue"
-    test-connection: true
-    protocol: smtps
-    properties:
-      mail:
-        smtp:
-          auth: true
-          ssl:
-            enable: true
-          starttls:
-            enable: true
-          connectiontimeout: 5000
-          timeout: 3000
-          writetimeout: 5000
-emailServiceImplementation: "userUpdater"
-mailing:
-  activation-url: http://localhost:5173/activate-account
-  email-address-sender: "doedating@yandex.ru"
-  activation-token-expiration: 7200
+
 
 elasticsearch:
   index:

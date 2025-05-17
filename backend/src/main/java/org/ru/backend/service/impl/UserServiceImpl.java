@@ -9,8 +9,6 @@ import org.ru.backend.enums.BusinessErrorCodes;
 import org.ru.backend.exception.ApiException;
 import org.ru.backend.mapper.UserMapper;
 import org.ru.backend.repository.UserRepository;
-import org.ru.backend.service.ActivationService;
-import org.ru.backend.service.S3Service;
 import org.ru.backend.service.UserService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -30,8 +28,6 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
-    private final ActivationService activationService;
-    private final S3Service s3Service;
 
     public List<UserResponseDTO> getAllUsers() {
         return userRepository.findAll().stream()
@@ -53,9 +49,7 @@ public class UserServiceImpl implements UserService {
         user.setUsername(request.getUsername());
         user.getRoles().add(Authorities.ROLE_USER);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-        Optional.ofNullable(request.getImageFile()).ifPresent(image -> user.setImagePath(s3Service.uploadFile(request.getImageFile())));
         User newUser = userRepository.save(user);
-        activationService.sendActivationEmail(newUser);
         return userMapper.toResponseDTO(newUser);
     }
 
@@ -70,7 +64,6 @@ public class UserServiceImpl implements UserService {
         Optional.ofNullable(dto.getUsername()).ifPresent(user::setUsername);
         Optional.ofNullable(dto.getPassword())
                 .ifPresent(pass -> user.setPassword(passwordEncoder.encode(pass)));
-        Optional.ofNullable(dto.getImageFile()).ifPresent(image -> user.setImagePath(s3Service.uploadFile(dto.getImageFile())));
 
         return userMapper.toResponseDTO(userRepository.save(user));
     }
