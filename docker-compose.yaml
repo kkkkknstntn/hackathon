@@ -99,6 +99,16 @@ services:
       interval: 5s
       timeout: 3s
       retries: 3
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: hackaton_frontend
+    ports:
+      - "3000:80"
+    networks:
+      - app-network
+
 
 volumes:
   pgdata_hacaton:

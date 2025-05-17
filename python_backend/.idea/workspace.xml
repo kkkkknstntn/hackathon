@@ -4,13 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3d9b7243-a874-4268-821f-6cd7e87c2796" name="Changes" comment="fix elastic">
-      <change afterPath="$PROJECT_DIR$/../backend/src/main/java/org/ru/backend/config/RedisConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/src/main/java/org/ru/backend/controller/RedisController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/main/java/org/ru/backend/controller/RedisController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/src/main/java/org/ru/backend/service/RedisService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/main/java/org/ru/backend/service/RedisService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="3d9b7243-a874-4268-821f-6cd7e87c2796" name="Changes" comment="fix elastic" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />

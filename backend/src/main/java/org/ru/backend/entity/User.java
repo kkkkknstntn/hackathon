@@ -23,7 +23,7 @@ public class User {
     private String password;
 
     @Column(nullable = false)
-    private Boolean isEnabled = false;
+    private Boolean isEnabled = true;
 
     private LocalDateTime createdAt;
 
