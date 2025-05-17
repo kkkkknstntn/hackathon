@@ -1,4 +1,4 @@
-import { Button, Dropdown, Menu, DatePicker, Space, ConfigProvider, type DatePickerProps } from 'antd';
+import { Button, Dropdown, Menu, DatePicker, Space, ConfigProvider } from 'antd';
 import { DownOutlined, CalendarOutlined } from '@ant-design/icons';
 import './FilterButtons.scss';
 import dayjs, { Dayjs } from 'dayjs';
@@ -45,15 +45,15 @@ export const Filters = ({
     </Menu>
   );
 
-  const handleChange: DatePickerProps['onChange'] = (date, dateString) => {
-    if (Array.isArray(dateString)) {
-      // Обработка случая с диапазоном дат (если нужно)
-      handleDateTimeChange(dateString[0]); // или другая логика
-    } else {
-      // Одиночная дата
-      handleDateTimeChange(date ? date.format('DD.MM.YYYY HH:mm:ss') : null);
-    }
+  // Обработчик даты без неиспользуемого параметра dateString
+  const handleChange = (date: Dayjs | null) => {
+    handleDateTimeChange(date ? date.format('DD.MM.YYYY HH:mm:ss') : null);
   };
+
+  // Обработчики видимости Dropdown без неиспользуемого параметра visible
+  const handleLanguagesVisibleChange = () => toggleFilter('languages');
+  const handlePackagesVisibleChange = () => toggleFilter('packages');
+  const handleErrorsVisibleChange = () => toggleFilter('errors');
 
   return (
     <div className='filters-container'>
@@ -61,15 +61,50 @@ export const Filters = ({
         theme={{
           components: {
             DatePicker: {
-              cellWidth: 20,
-              cellHeight: 20,
+              cellWidth: 28,
+              cellHeight: 28,
             }
           }
         }}
       >
         <Space size={12} wrap>
-          {/* ... остальные компоненты ... */}
-          
+          <Dropdown
+            overlay={renderFilterMenu(programmingLanguages, 'programmingLanguage')}
+            visible={visibleFilters.languages}
+            onVisibleChange={handleLanguagesVisibleChange}
+            trigger={['click']}
+          >
+            <Button className='filter-button'>
+              Языки программирования{filters.programmingLanguage ? `: ${filters.programmingLanguage}` : ''} <DownOutlined />
+            </Button>
+          </Dropdown>
+
+          <Dropdown
+            overlay={renderFilterMenu(
+              filters.programmingLanguage ? packagesByLanguage[filters.programmingLanguage] || [] : [],
+              'packageName'
+            )}
+            visible={visibleFilters.packages}
+            onVisibleChange={handlePackagesVisibleChange}
+            trigger={['click']}
+            disabled={!filters.programmingLanguage}
+          >
+            <Button className='filter-button'>
+              Имена пакетов{filters.packageName ? `: ${filters.packageName}` : ''} <DownOutlined />
+            </Button>
+          </Dropdown>
+
+          <Dropdown
+            overlay={renderFilterMenu(errorTypes, 'errorType')}
+            visible={visibleFilters.errors}
+            onVisibleChange={handleErrorsVisibleChange}
+            trigger={['click']}
+          >
+            <Button className='filter-button'>
+              Типы ошибок{filters.errorType ? `: ${filters.errorType}` : ''} <DownOutlined />
+            </Button>
+          </Dropdown>
+
           <DatePicker
             showTime={{ 
               format: 'HH:mm:ss',
@@ -77,12 +112,11 @@ export const Filters = ({
             }}
             format="DD.MM.YYYY HH:mm:ss"
             placeholder="Дата и время"
-            onChange={handleChange}
+            onChange={(date, _dateString) => handleChange(date)}
             suffixIcon={<CalendarOutlined />}
             className="date-time-picker"
             allowClear
             inputReadOnly
-            popupClassName="custom-datepicker-dropdown"
           />
         </Space>
       </ConfigProvider>
