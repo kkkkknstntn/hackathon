@@ -1,54 +1,69 @@
-import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
 import type { 
   SearchLogsParams, 
   SearchLogsResponseDTO 
 } from '../shared/types/logs';
 import dayjs from 'dayjs';
-
-const API_BASE_URL = import.meta.env.VITE_PROXY_TARGET;
-
-const api = axios.create({
-  baseURL: API_BASE_URL,
-  withCredentials: true,
-});
+import { authAxios } from '@/app/api';
 
 export const fetchLogs = async (params: SearchLogsParams): Promise<SearchLogsResponseDTO> => {
-  const processedParams = {
-    ...params,
-    date: params.date ? dayjs(params.date).format('YYYY-MM-DDTHH:mm:ss') : undefined
+  // Исправлено: явная проверка на массив и тип для errors
+  const backendParams: Record<string, any> = {
+    query: params.query,
+    programmingLanguage: params.programmingLanguage,
+    errors: Array.isArray(params.errors) ? params.errors.join(',') : undefined,
+    packageField: params.packageField,
+    packageDependencies: params.packageDependencies,
+    packageDescription: params.packageDescription,
+    packageGroup: params.packageGroup,
+    packageSummary: params.packageSummary,
+    log: params.log,
+    date: params.date ? dayjs(params.date).format('YYYY-MM-DD') : undefined
   };
-  
-  const response = await api.get<SearchLogsResponseDTO>('/api/searchLogs', { 
-    params: processedParams 
+
+  // Удаляем undefined параметры (оптимизированная версия)
+  const filteredParams = Object.fromEntries(
+    Object.entries(backendParams).filter(([_, v]) => v !== undefined)
+  );
+
+  console.log('Sending request with params:', filteredParams);
+
+  try {
+    const response = await authAxios.get<SearchLogsResponseDTO>('/searchLogs', {
+      params: filteredParams,
+      paramsSerializer: { indexes: null },
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    });
+
+    console.log('Response data:', response.data);
+    
+    if (!response.data?.logs) {
+      throw new Error('Invalid response format: missing logs array');
+    }
+    
+    return response.data;
+  } catch (error) {
+    console.error('Fetch logs error:', error);
+    throw new Error('Failed to fetch logs. Please try again later.');
+  }
+};
+
+// Остальные функции остаются без изменений
+export const fetchPackages = async (): Promise<string[]> => {
+  const response = await authAxios.get<string[]>('/api/filters', {
+    params: { enumKey: 'PACKAGES' }
   });
   return response.data;
 };
 
-export const fetchUniquePackages = async (): Promise<string[]> => {
-  const response = await api.get<string[]>('/api/uniquePackages');
+export const fetchErrors = async (): Promise<string[]> => {
+  const response = await authAxios.get<string[]>('/api/filters', {
+    params: { enumKey: 'ERRORS' }
+  });
   return response.data;
-};
-
-export const fetchProgrammingLanguages = async (): Promise<string[]> => {
-  const response = await api.get<SearchLogsResponseDTO>('/api/searchLogs', {
-    params: { limit: 1 }
-  });
-  return Array.from(new Set(
-    response.data.logs.map(log => log.programming_language)
-  ));
-};
-
-export const fetchErrorTypes = async (): Promise<string[]> => {
-  const response = await api.get<SearchLogsResponseDTO>('/api/searchLogs', {
-    params: { limit: 100 }
-  });
-  
-  return Array.from(new Set(
-    response.data.logs.flatMap(log => 
-      log.errors.map(error => error.short_name)
-    )
-  ));
 };
 
 export const useLogsQuery = (params: SearchLogsParams) => {
@@ -56,30 +71,22 @@ export const useLogsQuery = (params: SearchLogsParams) => {
     queryKey: ['logs', params],
     queryFn: () => fetchLogs(params),
     staleTime: 5 * 60 * 1000,
+    retry: 2
   });
 };
 
-export const useUniquePackagesQuery = () => {
+export const usePackagesQuery = () => {
   return useQuery({
-    queryKey: ['uniquePackages'],
-    queryFn: fetchUniquePackages,
+    queryKey: ['packages'],
+    queryFn: fetchPackages,
     staleTime: 60 * 60 * 1000,
   });
 };
 
-export const useProgrammingLanguagesQuery = () => {
+export const useErrorsQuery = () => {
   return useQuery({
-    queryKey: ['programmingLanguages'],
-    queryFn: fetchProgrammingLanguages,
+    queryKey: ['errors'],
+    queryFn: fetchErrors,
     staleTime: 60 * 60 * 1000,
   });
 };
-
-export const useErrorTypesQuery = () => {
-  return useQuery({
-    queryKey: ['errorTypes'],
-    queryFn: fetchErrorTypes,
-    staleTime: 60 * 60 * 1000,
-  });
-};
-

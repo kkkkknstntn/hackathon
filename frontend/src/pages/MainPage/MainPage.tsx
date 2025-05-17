@@ -1,14 +1,13 @@
 import { useState, useEffect } from 'react';
-import { Row, Col, Spin } from 'antd';
+import { Row, Col, Spin, notification} from 'antd';
 import { Header } from './components/Header/Header';
 import { Filters } from './components/FilterButtons/FilterButtons';
 import { LogsList } from './components/LogsList/LogsList';
 import { LogDetails } from './components/LogDetails/LogDetails';
 import { 
   fetchLogs, 
-  fetchProgrammingLanguages,
-  fetchUniquePackages,
-  fetchErrorTypes
+  fetchPackages,
+  fetchErrors
 } from '../../services/logs.service';
 import type { SearchLogsParams, LogDocument } from '../../shared/types/logs';
 import './MainPage.scss';
@@ -18,34 +17,24 @@ export const MainPage = () => {
   const [logs, setLogs] = useState<LogDocument[]>([]);
   const [filters, setFilters] = useState<SearchLogsParams>({});
   const [visibleFilters, setVisibleFilters] = useState({
-    languages: false,
     packages: false,
     errors: false
   });
-  const [programmingLanguages, setProgrammingLanguages] = useState<string[]>([]);
-  const [packagesByLanguage, setPackagesByLanguage] = useState<Record<string, string[]>>({});
-  const [errorTypes, setErrorTypes] = useState<string[]>([]);
+  const [packages, setPackages] = useState<string[]>([]);
+  const [errors, setErrors] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const initData = async () => {
       setLoading(true);
       try {
-        const [languages, errors] = await Promise.all([
-          fetchProgrammingLanguages(),
-          fetchErrorTypes()
+        const [pkgs, errs] = await Promise.all([
+          fetchPackages(),
+          fetchErrors()
         ]);
         
-        setProgrammingLanguages(languages);
-        setErrorTypes(errors);
-        
-        const packagesMap: Record<string, string[]> = {};
-        for (const lang of languages) {
-          packagesMap[lang] = await fetchUniquePackages();
-        }
-        setPackagesByLanguage(packagesMap);
-        
-        await loadLogs();
+        setPackages(pkgs);
+        setErrors(errs);
       } catch (error) {
         console.error('Initialization error:', error);
       } finally {
@@ -60,9 +49,23 @@ export const MainPage = () => {
     setLoading(true);
     try {
       const response = await fetchLogs(filters);
+      console.log('Received logs:', response.logs);
+      
+      if (response.logs.length === 0) {
+        notification.info({
+          message: 'Информация',
+          description: 'Логи по заданным фильтрам не найдены'
+        });
+      }
+      
       setLogs(response.logs);
     } catch (error) {
       console.error('Error loading logs:', error);
+      notification.error({
+        message: 'Ошибка',
+        description: error instanceof Error ? error.message : 'Неизвестная ошибка'
+      });
+      setLogs([]);
     } finally {
       setLoading(false);
     }
@@ -83,7 +86,6 @@ export const MainPage = () => {
     };
     setFilters(newFilters);
     setVisibleFilters(prev => ({ ...prev, [type]: false }));
-    loadLogs();
   };
 
   const toggleFilter = (filter: string) => {
@@ -101,12 +103,12 @@ export const MainPage = () => {
         <Filters
           filters={filters}
           visibleFilters={visibleFilters}
-          programmingLanguages={programmingLanguages}
-          packagesByLanguage={packagesByLanguage}
-          errorTypes={errorTypes}
+          packages={packages}
+          errors={errors}
           toggleFilter={toggleFilter}
           handleFilterSelect={handleFilterSelect}
           handleDateTimeChange={handleDateTimeChange}
+          handleApplyFilters={loadLogs}
         />
 
         <Row gutter={[16, 16]}>
