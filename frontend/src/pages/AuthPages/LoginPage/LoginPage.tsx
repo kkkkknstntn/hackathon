@@ -12,7 +12,7 @@ export const LoginPage = () => {
 	const handleSubmit = (values: LoginFormData) => {
 		mutate(values, {
 			onSuccess: () => {
-				navigate('/courses')
+				navigate('/')
 			},
 			onError: () => {
 				Modal.error({

@@ -5,7 +5,7 @@ export interface Error {
 
 export interface LogDocument {
   programming_language: string;
-  errors: Error[];
+  errors: Error[]; 
   package_field: string;
   timestamp: string;
   package_dependencies: string[];
@@ -13,8 +13,8 @@ export interface LogDocument {
   package_group: string;
   package_summary: string;
   log: string;
-  first_log_date: string;
-  last_log_date: string;
+  first_log_date?: string; 
+  last_log_date?: string;
 }
 
 export interface SearchLogsResponseDTO {

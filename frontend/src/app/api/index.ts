@@ -1,7 +1,9 @@
 import { authService } from '@/services/auth.service'
 import axios from 'axios'
+
 export const authAxios = axios.create({
 	withCredentials: true,
+	baseURL: 'http://localhost:8080',
 })
 
 authAxios.interceptors.request.use(config => {
@@ -24,7 +26,7 @@ authAxios.interceptors.response.use(
 	async error => {
 		const originalRequest = error.config
 		if (
-			[401, 403].includes(error.response?.status) &&
+			[777].includes(error.response?.status) &&
 			!originalRequest._retry
 		) {
 			originalRequest._retry = true
@@ -34,7 +36,7 @@ authAxios.interceptors.response.use(
 				return authAxios(originalRequest)
 			} catch (refreshError) {
 				localStorage.removeItem('accessToken')
-				window.location.href = '/login'
+				//window.location.href = '/login'
 				return Promise.reject(refreshError)
 			}
 		}

@@ -1,0 +1,19 @@
+.stats-page {
+  padding: 24px;
+  
+  .loading, .error {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 300px;
+  }
+  
+  .stat-card {
+    margin-bottom: 16px;
+    height: 100%;
+    
+    .ant-card-head-title {
+      white-space: normal;
+    }
+  }
+}

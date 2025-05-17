@@ -1,4 +1,4 @@
-import { Button, Dropdown, Menu, DatePicker, Space, ConfigProvider } from 'antd';
+import { Button, Dropdown, type MenuProps, DatePicker, Space, ConfigProvider } from 'antd';
 import { DownOutlined, CalendarOutlined } from '@ant-design/icons';
 import './FilterButtons.scss';
 import dayjs from 'dayjs';
@@ -10,73 +10,54 @@ dayjs.extend(customParseFormat);
 interface FiltersProps {
   filters: SearchLogsParams;
   visibleFilters: {
-    languages: boolean;
     packages: boolean;
     errors: boolean;
   };
-  programmingLanguages: string[];
-  packagesByLanguage: Record<string, string[]>;
-  errorTypes: string[];
+  packages: string[];
+  errors: string[];
   toggleFilter: (filter: string) => void;
   handleFilterSelect: (type: keyof SearchLogsParams, value: string) => void;
   handleDateTimeChange: (date: string | null) => void;
+  handleApplyFilters: () => void; // Новый проп
 }
 
 export const Filters = ({
   filters,
   visibleFilters,
-  programmingLanguages,
-  packagesByLanguage,
-  errorTypes,
+  packages,
+  errors,
   toggleFilter,
   handleFilterSelect,
-  handleDateTimeChange
+  handleDateTimeChange,
+  handleApplyFilters
 }: FiltersProps) => {
-  const renderFilterMenu = (items: string[], filterType: keyof SearchLogsParams) => (
-    <Menu 
-      style={{ maxHeight: '300px', overflowY: 'auto' }}
-      selectedKeys={filters[filterType] ? [filters[filterType] as string] : []}
-    >
-      {items.map(item => (
-        <Menu.Item 
-          key={item}
-          onClick={() => handleFilterSelect(filterType, item)}
-        >
-          {item}
-        </Menu.Item>
-      ))}
-    </Menu>
-  );
+  const renderMenuItems = (items: string[], filterType: keyof SearchLogsParams): MenuProps['items'] => 
+    items.map(item => ({
+      key: item,
+      label: item,
+      onClick: () => handleFilterSelect(filterType, item)
+    }));
 
   const handleDateChange = (date: dayjs.Dayjs | null) => {
-    handleDateTimeChange(date ? date.format('YYYY-MM-DD') : null);
+    handleDateTimeChange(date ? date.format('YYYY-MM-DDTHH:mm:ss') : null);
   };
 
   return (
     <div className='filters-container'>
-      <ConfigProvider theme={{ components: { DatePicker: { cellWidth: 28, cellHeight: 28 } } }}>
+      <ConfigProvider theme={{
+        components: {
+          DatePicker: {
+            cellWidth: 28,
+            cellHeight: 28
+          }
+        }
+      }}>
         <Space size={12} wrap>
           <Dropdown
-            overlay={renderFilterMenu(programmingLanguages, 'programmingLanguage')}
-            open={visibleFilters.languages}
-            onOpenChange={() => toggleFilter('languages')}
-            trigger={['click']}
-          >
-            <Button className='filter-button'>
-              Языки{filters.programmingLanguage ? `: ${filters.programmingLanguage}` : ''} <DownOutlined />
-            </Button>
-          </Dropdown>
-
-          <Dropdown
-            overlay={renderFilterMenu(
-              filters.programmingLanguage ? 
-                packagesByLanguage[filters.programmingLanguage] || [] : [],
-              'packageField'
-            )}
+            menu={{ items: renderMenuItems(packages, 'packageField') }}
             open={visibleFilters.packages}
             onOpenChange={() => toggleFilter('packages')}
             trigger={['click']}
-            disabled={!filters.programmingLanguage}
           >
             <Button className='filter-button'>
               Пакеты{filters.packageField ? `: ${filters.packageField}` : ''} <DownOutlined />
@@ -84,7 +65,7 @@ export const Filters = ({
           </Dropdown>
 
           <Dropdown
-            overlay={renderFilterMenu(errorTypes, 'errors')}
+            menu={{ items: renderMenuItems(errors, 'errors') }}
             open={visibleFilters.errors}
             onOpenChange={() => toggleFilter('errors')}
             trigger={['click']}
@@ -95,13 +76,22 @@ export const Filters = ({
           </Dropdown>
 
           <DatePicker
-            format="YYYY-MM-DD"
-            placeholder="Дата"
+            showTime={{ format: 'HH:mm:ss' }}
+            format="YYYY-MM-DD HH:mm:ss"
+            placeholder="Дата и время"
             onChange={handleDateChange}
             suffixIcon={<CalendarOutlined />}
             className="date-picker"
             allowClear
           />
+
+          <Button 
+            type="primary" 
+            onClick={handleApplyFilters}
+            className='apply-button'
+          >
+            Применить
+          </Button>
         </Space>
       </ConfigProvider>
     </div>
