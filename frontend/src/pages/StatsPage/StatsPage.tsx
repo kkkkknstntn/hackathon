@@ -1,4 +1,5 @@
-import { Card, Row, Col, Typography, Spin, Empty, Alert } from 'antd';
+import { useState } from 'react';
+import { Card, Row, Col, Typography, Spin, Empty, Alert, List } from 'antd';
 import { useQuery } from '@tanstack/react-query';
 import { fetchErrorStats } from '../../services/stats.service';
 import './StatsPage.scss';
@@ -6,13 +7,13 @@ import './StatsPage.scss';
 const { Title, Text } = Typography;
 
 export const StatsPage = () => {
+  const [selectedError, setSelectedError] = useState<string | null>(null);
   const { data: stats, isLoading, isError } = useQuery({
     queryKey: ['errorStats'],
     queryFn: fetchErrorStats,
-    retry: 2 // Количество попыток повторного запроса при ошибке
+    retry: 2
   });
 
-  // Проверка на пустые данные
   const isEmptyData = !stats || Object.keys(stats).length === 0;
 
   if (isLoading) {
@@ -38,7 +39,7 @@ export const StatsPage = () => {
 
   return (
     <div className="stats-page">
-      <Title level={2}>Статистика ошибок</Title>
+      <Title level={2} className="page-title">Статистика ошибок</Title>
       
       {isEmptyData ? (
         <Empty
@@ -46,22 +47,56 @@ export const StatsPage = () => {
           description="Нет данных для отображения"
         />
       ) : (
-        <Row gutter={[16, 16]}>
-          {Object.entries(stats).map(([errorName, stat]) => (
-            <Col xs={24} md={12} lg={8} key={errorName}>
-              <Card title={errorName} className="stat-card">
-                <Text strong>Количество: </Text>
-                {stat?.count ?? 'Нет данных'}
-                
-                <div style={{ marginTop: 8 }}>
-                  <Text strong>Пакеты: </Text>
-                  {stat?.packages?.length > 0 
-                    ? stat.packages.join(', ')
-                    : 'Не найдено'}
+        <Row gutter={[24, 24]} className="stats-container">
+          {/* Список ошибок слева */}
+          <Col xs={24} md={8} className="errors-list">
+            <Card title="Список ошибок" className="list-card">
+              <List
+                dataSource={Object.keys(stats)}
+                renderItem={(errorName) => (
+                  <List.Item
+                    onClick={() => setSelectedError(errorName)}
+                    className={`list-item ${selectedError === errorName ? 'selected' : ''}`}
+                  >
+                    {errorName}
+                  </List.Item>
+                )}
+              />
+            </Card>
+          </Col>
+
+          {/* Детали ошибки справа */}
+          <Col xs={24} md={16} className="error-details">
+            {selectedError ? (
+              <Card 
+                title={`Детали ошибки: ${selectedError}`} 
+                className="details-card"
+              >
+                <div className="details-content">
+                  <Text strong>Количество: </Text>
+                  <Text>{stats[selectedError]?.count ?? 'Нет данных'}</Text>
+                  
+                  <div className="packages-section">
+                    <Text strong>Пакеты: </Text>
+                    {stats[selectedError]?.packages?.length > 0 ? (
+                      <div className="packages-list">
+                        {stats[selectedError].packages.join(', ')}
+                      </div>
+                    ) : (
+                      <Text>Не найдено</Text>
+                    )}
+                  </div>
                 </div>
               </Card>
-            </Col>
-          ))}
+            ) : (
+              <Card className="details-card">
+                <Empty
+                  image={Empty.PRESENTED_IMAGE_SIMPLE}
+                  description="Выберите ошибку для просмотра деталей"
+                />
+              </Card>
+            )}
+          </Col>
         </Row>
       )}
     </div>
