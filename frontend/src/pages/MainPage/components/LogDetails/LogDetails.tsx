@@ -1,11 +1,12 @@
 import { Card, Tabs, Alert, Divider, Typography } from 'antd';
 import './LogDetails.scss';
+import type { LogDocument } from '../../../../shared/types/logs';
 
 const { TabPane } = Tabs;
 const { Text } = Typography;
 
 interface LogDetailsProps {
-  selectedLog: any;
+  selectedLog: LogDocument | null;
 }
 
 export const LogDetails = ({ selectedLog }: LogDetailsProps) => {
@@ -19,17 +20,17 @@ export const LogDetails = ({ selectedLog }: LogDetailsProps) => {
         </TabPane>
         <TabPane tab="Анализ" key="2">
           <Alert
-            message="Ошибка сборки"
-            description="Пакет не прошел тесты"
+            message={`Ошибка: ${selectedLog.errors[0]?.short_name || 'Неизвестная ошибка'}`}
+            description={selectedLog.errors[0]?.full_error || 'Описание отсутствует'}
             type="error"
             showIcon
           />
           <Divider />
           <Text strong>Рекомендуемые действия:</Text>
           <ul>
-            <li>Проверить зависимости</li>
+            <li>Проверить зависимости: {selectedLog.package_dependencies.join(', ')}</li>
+            <li>Проверить совместимость с {selectedLog.programming_language}</li>
             <li>Обновить версию пакета</li>
-            <li>Проверить системные требования</li>
           </ul>
         </TabPane>
       </Tabs>

@@ -1,74 +1,89 @@
 import { useState, useEffect } from 'react';
-import { Row, Col } from 'antd';
+import { Row, Col, Spin } from 'antd';
 import { Header } from './components/Header/Header';
 import { Filters } from './components/FilterButtons/FilterButtons';
 import { LogsList } from './components/LogsList/LogsList';
 import { LogDetails } from './components/LogDetails/LogDetails';
+import { 
+  fetchLogs, 
+  fetchProgrammingLanguages,
+  fetchUniquePackages,
+  fetchErrorTypes
+} from '../../services/logs.service';
+import type { SearchLogsParams, LogDocument } from '../../shared/types/logs';
 import './MainPage.scss';
 
 export const MainPage = () => {
-  const [selectedLog, setSelectedLog] = useState<any>(null);
-  const [logs, setLogs] = useState<any[]>([]);
-  const [filters, setFilters] = useState({
-    programmingLanguage: null,
-    packageName: null,
-    errorType: null
-  });
+  const [selectedLog, setSelectedLog] = useState<LogDocument | null>(null);
+  const [logs, setLogs] = useState<LogDocument[]>([]);
+  const [filters, setFilters] = useState<SearchLogsParams>({});
   const [visibleFilters, setVisibleFilters] = useState({
     languages: false,
     packages: false,
     errors: false
   });
-
-  const programmingLanguages = ['C++', 'PHP', 'C#'];
-  const packagesByLanguage = {
-    'C++': ['perl-YAML-PP-LibYAML', 'perl-YAML-PP-Ref', 'pgagent', 'plots'],
-    'PHP': ['laravel/framework', 'symfony/http-foundation', 'guzzlehttp/guzzle'],
-    'C#': ['Newtonsoft.Json', 'NUnit', 'Dapper']
-  };
-  const errorTypes = ['composer_error', 'rpm_error', 'command_nonzero', 'syntax_error', 'dependency_error'];
+  const [programmingLanguages, setProgrammingLanguages] = useState<string[]>([]);
+  const [packagesByLanguage, setPackagesByLanguage] = useState<Record<string, string[]>>({});
+  const [errorTypes, setErrorTypes] = useState<string[]>([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const mockLogs = [
-      {
-        log: "Пример лога ошибки...",
-        programming_language: "C++",
-        errors: ["composer_error", "rpm_error"],
-        package_field: "perl-YAML-PP-LibYAML-0.005-alt2",
-        timestamp: "2025-05-16T17:04:45.303723",
-        dependencies: [
-          { name: "perl-YAML-PP", status: "ok" },
-          { name: "perl-LibYAML", status: "error" },
-          { name: "perl-Base", status: "ok" }
-        ],
-        packageInfo: {
-          version: "0.005-alt2",
-          lastUpdated: "2025-05-16",
-          author: "John Doe",
-          license: "MIT"
+    const initData = async () => {
+      setLoading(true);
+      try {
+        const [languages, errors] = await Promise.all([
+          fetchProgrammingLanguages(),
+          fetchErrorTypes()
+        ]);
+        
+        setProgrammingLanguages(languages);
+        setErrorTypes(errors);
+        
+        const packagesMap: Record<string, string[]> = {};
+        for (const lang of languages) {
+          packagesMap[lang] = await fetchUniquePackages();
         }
+        setPackagesByLanguage(packagesMap);
+        
+        await loadLogs();
+      } catch (error) {
+        console.error('Initialization error:', error);
+      } finally {
+        setLoading(false);
       }
-    ];
-    setLogs(mockLogs);
+    };
+    
+    initData();
   }, []);
 
-  const handleLogSelect = (log: any) => {
+  const loadLogs = async () => {
+    setLoading(true);
+    try {
+      const response = await fetchLogs(filters);
+      setLogs(response.logs);
+    } catch (error) {
+      console.error('Error loading logs:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleLogSelect = (log: LogDocument) => {
     setSelectedLog(log);
   };
 
   const handleDateTimeChange = (dateTime: string | null) => {
-    console.log('Selected datetime:', dateTime);
-    // Здесь можно добавить логику фильтрации по дате
-    // Например:
-    // setFilters(prev => ({...prev, dateTime}));
+    setFilters(prev => ({...prev, date: dateTime || undefined}));
   };
 
-  const handleFilterSelect = (type: string, value: string) => {
-    setFilters(prev => ({
-      ...prev,
-      [type]: prev[type as keyof typeof prev] === value ? null : value
-    }));
+  const handleFilterSelect = (type: keyof SearchLogsParams, value: string) => {
+    const newFilters = {
+      ...filters,
+      [type]: filters[type] === value ? undefined : value
+    };
+    setFilters(newFilters);
     setVisibleFilters(prev => ({ ...prev, [type]: false }));
+    loadLogs();
   };
 
   const toggleFilter = (filter: string) => {
@@ -82,29 +97,31 @@ export const MainPage = () => {
     <div className='main-page'>
       <Header />
       
-      <Filters
-        filters={filters}
-        visibleFilters={visibleFilters}
-        programmingLanguages={programmingLanguages}
-        packagesByLanguage={packagesByLanguage}
-        errorTypes={errorTypes}
-        toggleFilter={toggleFilter}
-        handleFilterSelect={handleFilterSelect}
-		handleDateTimeChange={handleDateTimeChange}
-      />
+      <Spin spinning={loading} delay={300}>
+        <Filters
+          filters={filters}
+          visibleFilters={visibleFilters}
+          programmingLanguages={programmingLanguages}
+          packagesByLanguage={packagesByLanguage}
+          errorTypes={errorTypes}
+          toggleFilter={toggleFilter}
+          handleFilterSelect={handleFilterSelect}
+          handleDateTimeChange={handleDateTimeChange}
+        />
 
-      <Row gutter={[16, 16]}>
-        <Col xs={24} md={12}>
-          <LogsList 
-            logs={logs} 
-            selectedLog={selectedLog} 
-            handleLogSelect={handleLogSelect} 
-          />
-        </Col>
-        <Col xs={24} md={12}>
-          <LogDetails selectedLog={selectedLog} />
-        </Col>
-      </Row>
+        <Row gutter={[16, 16]}>
+          <Col xs={24} md={12}>
+            <LogsList 
+              logs={logs} 
+              selectedLog={selectedLog} 
+              handleLogSelect={handleLogSelect} 
+            />
+          </Col>
+          <Col xs={24} md={12}>
+            <LogDetails selectedLog={selectedLog} />
+          </Col>
+        </Row>
+      </Spin>
     </div>
   );
 };

@@ -1,13 +1,14 @@
 import { Card, Divider, List, Space, Tag, Typography } from 'antd';
-import { WarningOutlined } from '@ant-design/icons';
 import './LogsList.scss';
+import type { LogDocument } from '../../../../shared/types/logs';
+import dayjs from 'dayjs';
 
 const { Text, Paragraph } = Typography;
 
 interface LogsListProps {
-  logs: any[];
-  selectedLog: any;
-  handleLogSelect: (log: any) => void;
+  logs: LogDocument[];
+  selectedLog: LogDocument | null;
+  handleLogSelect: (log: LogDocument) => void;
 }
 
 export const LogsList = ({ logs, selectedLog, handleLogSelect }: LogsListProps) => {
@@ -25,10 +26,12 @@ export const LogsList = ({ logs, selectedLog, handleLogSelect }: LogsListProps) 
               title={<Text className='log-title'>{log.package_field}</Text>}
               description={
                 <Space size="small">
-                  {log.errors.map((error: string) => (
-                    <Tag color="red" key={error}>{error}</Tag>
+                  {log.errors.map((error) => (
+                    <Tag color="red" key={error.short_name}>{error.short_name}</Tag>
                   ))}
-                  <Text type="secondary">{new Date(log.timestamp).toLocaleString()}</Text>
+                  <Text type="secondary">
+                    {dayjs(log.timestamp).format('YYYY-MM-DD HH:mm:ss')}
+                  </Text>
                 </Space>
               }
             />
@@ -40,14 +43,13 @@ export const LogsList = ({ logs, selectedLog, handleLogSelect }: LogsListProps) 
         <>
           <Divider orientation="left">Зависимости</Divider>
           <div className="dependencies">
-            {selectedLog.dependencies.map((dep: any) => (
+            {selectedLog.package_dependencies.map((dep) => (
               <Tag 
-                key={dep.name} 
-                color={dep.status === 'error' ? 'red' : 'default'}
+                key={dep} 
+                color="default"
                 className="dependency-tag"
               >
-                {dep.name}
-                {dep.status === 'error' && <WarningOutlined style={{ marginLeft: 5 }} />}
+                {dep}
               </Tag>
             ))}
           </div>
@@ -55,19 +57,13 @@ export const LogsList = ({ logs, selectedLog, handleLogSelect }: LogsListProps) 
           <Divider orientation="left">Информация о пакете</Divider>
           <div className="package-info">
             <Paragraph>
-              <Text strong>Имя:</Text> {selectedLog.package_field.split('-')[0]}
+              <Text strong>Язык:</Text> {selectedLog.programming_language}
             </Paragraph>
             <Paragraph>
-              <Text strong>Версия:</Text> {selectedLog.packageInfo.version}
+              <Text strong>Группа:</Text> {selectedLog.package_group}
             </Paragraph>
             <Paragraph>
-              <Text strong>Последнее обновление:</Text> {selectedLog.packageInfo.lastUpdated}
-            </Paragraph>
-            <Paragraph>
-              <Text strong>Автор:</Text> {selectedLog.packageInfo.author}
-            </Paragraph>
-            <Paragraph>
-              <Text strong>Лицензия:</Text> {selectedLog.packageInfo.license}
+              <Text strong>Описание:</Text> {selectedLog.package_description}
             </Paragraph>
           </div>
         </>
