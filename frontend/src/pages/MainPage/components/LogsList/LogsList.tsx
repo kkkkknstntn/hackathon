@@ -65,9 +65,6 @@ export const LogsList = ({ logs, selectedLog, handleLogSelect }: LogsListProps) 
               <Divider orientation="left">Информация о пакете</Divider>
               <div className="package-info">
                 <Paragraph>
-                  <Text strong>Язык:</Text> {selectedLog.programming_language}
-                </Paragraph>
-                <Paragraph>
                   <Text strong>Группа:</Text> {selectedLog.package_group}
                 </Paragraph>
                 <Paragraph>
