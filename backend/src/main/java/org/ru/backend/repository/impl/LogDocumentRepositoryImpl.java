@@ -68,8 +68,8 @@ public class LogDocumentRepositoryImpl {
                                                             .query(nq -> nq
                                                                     .bool(bq -> bq
                                                                             .must(shl -> shl
-                                                                                    .match(m -> m
-                                                                                            .field("errors.full_error")
+                                                                                    .matchPhrase(m -> m
+                                                                                            .field("errors.short_name")
                                                                                             .query(errors)
                                                                                     ))
                                                                     )
@@ -79,7 +79,7 @@ public class LogDocumentRepositoryImpl {
 
                                         if (packageField != null && !packageField.isEmpty()) {
                                             b.must(sh -> sh
-                                                    .match(m -> m
+                                                    .matchPhrase(m -> m
                                                             .field("package_field")
                                                             .query(packageField)
                                                     ));
