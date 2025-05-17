@@ -1,12 +1,6 @@
 server:
   port: 8080
 
-s3:
-  accessKeyId: minioadmin
-  secretAccessKey: minioadmin
-  url: http://localhost:9000
-  region: us-east-1
-  bucket: bucket
 logging:
   level:
     org.springdoc: DEBUG
@@ -50,8 +44,6 @@ spring:
     username: postgres
     password: postgres
   jpa:
-    hibernate:
-      ddl-auto: create
     show-sql: true
     properties:
       hibernate:

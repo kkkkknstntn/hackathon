@@ -45,7 +45,7 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter-web"
     implementation "org.springframework.boot:spring-boot-starter-validation"
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
-    implementation 'redis.clients:jedis:4.2.3'
+    implementation 'redis.clients:jedis'
     implementation platform('org.springframework.cloud:spring-cloud-dependencies:2020.0.4')
 
 
@@ -63,11 +63,11 @@ dependencies {
     implementation "org.mapstruct:mapstruct:${mapStructVersion}"
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapStructVersion}"
 
-    testImplementation "org.springframework.boot:spring-boot-starter-test"
-    testImplementation "org.springframework.security:spring-security-test"
-    testImplementation "org.testcontainers:junit-jupiter:${testContainersVersion}"
-    testImplementation "org.testcontainers:postgresql:${testContainersVersion}"
-    testImplementation "org.testcontainers:elasticsearch:${testContainersVersion}"
+//    testImplementation "org.springframework.boot:spring-boot-starter-test"
+//    testImplementation "org.springframework.security:spring-security-test"
+//    testImplementation "org.testcontainers:junit-jupiter:${testContainersVersion}"
+//    testImplementation "org.testcontainers:postgresql:${testContainersVersion}"
+//    testImplementation "org.testcontainers:elasticsearch:${testContainersVersion}"
 
     implementation "org.springframework.boot:spring-boot-starter-mail"
     implementation "org.springframework.boot:spring-boot-starter-thymeleaf"

@@ -13,6 +13,31 @@ from concurrent.futures import ThreadPoolExecutor
 
 logging.basicConfig(level=logging.DEBUG)
 
+import subprocess
+import os
+
+# Выполнение запроса через rsync
+def sync_logs():
+    try:
+        # Выполнение команды синхронизации
+        subprocess.run(
+            ['rsync', '-avp', '--delete-after', 'git.altlinux.org::beehive-logs/Sisyphus-x86_64/latest/error', '.'],
+            check=True)
+        print("Синхронизация завершена успешно.")
+    except subprocess.CalledProcessError as e:
+        print(f"Ошибка при синхронизации: {e}")
+
+
+# Запуск нескольких Jupyter Notebook для записи логов в JSON
+def run_notebooks(notebook_files):
+    for notebook in notebook_files:
+        try:
+            # Запуск каждого файла .ipynb с помощью Jupyter
+            print(f"Запуск {notebook}...")
+            subprocess.run(['jupyter', 'nbconvert', '--to', 'notebook', '--execute', notebook], check=True)
+            print(f"{notebook} выполнен успешно.")
+        except subprocess.CalledProcessError as e:
+            print(f"Ошибка при запуске {notebook}: {e}")
 
 def read_json_errors(json_path):
     """Чтение JSON файла с ошибками для кластеров с проверкой наличия файла"""
@@ -169,6 +194,14 @@ def parse_logs_from_directory(csv_path, chunk_21_path, json_errors, es_client, i
 
 
 def schedule_log_parsing():
+    # Синхронизация логов (вы можете добавить другие источники, если нужно)
+    sync_logs()
+
+    # Список файлов Jupyter Notebook, которые нужно запустить
+    notebooks = ['notebook.ipynb']  # Замените на свои файлы
+
+    # Запуск Jupyter Notebook файлов
+    run_notebooks(notebooks)
     # Используем директорию скрипта для определения пути к файлам
     script_dir = os.path.dirname(os.path.abspath(__file__))
     csv_path = os.path.join(script_dir, 'logs_with_labels_with_id.csv')
@@ -200,7 +233,7 @@ def schedule_log_parsing():
 
 scheduler = BackgroundScheduler()
 
-scheduler.add_job(schedule_log_parsing, 'cron', hour=0, minute=1, second=0)
+scheduler.add_job(schedule_log_parsing, 'cron', minute='*')
 
 schedule_log_parsing()
 
