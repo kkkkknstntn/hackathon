@@ -18,7 +18,6 @@ import java.util.Set;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api")
 public class RedisController {
 
     private final RedisService redisService;

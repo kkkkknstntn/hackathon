@@ -27,8 +27,8 @@ def fetch_package_info(file_name):
     """Обработка запросов к API параллельно, используя ThreadPoolExecutor."""
     print(file_name)
     print(truncate_string(file_name))
-    if truncate_string(file_name):
-        package_name = truncate_string(file_name)
+    if  truncate_string(file_name):
+        package_name =  truncate_string(file_name)
     else:
         package_name = file_name
 
@@ -44,24 +44,24 @@ def fetch_package_info(file_name):
     }
     try:
         response = requests.get(url, params=params, headers=headers)
-        response.raise_for_status()  # Raise exception for 4xx/5xx responses
+        response.raise_for_status()
         package_info = response.json()
         if package_info and 'packages' in package_info:
             return package_info['packages'][0]
-        else:
-            logging.warning(f"Информация о пакете {package_name} не найдена.")
     except requests.RequestException as e:
-        logging.error(f"Ошибка запроса к API для {package_name}: {e}")
-        return None  # Возвращаем None в случае ошибки
+        logging.error(f"Ошибка запроса к API: {e}")
+    return None
+
 
 def parse_logs_from_directory(directory, es_client, index_name, redis_client):
+    # Используем пул потоков для параллельной обработки файлов
     with ThreadPoolExecutor(max_workers=10) as executor:
         futures = []
         for root, dirs, files in os.walk(directory):
             for file in files:
-                if redis_client.sismember("processed_files", file):
-                    logging.debug(f"Файл {file} уже обработан. Пропускаем.")
-                    continue
+                # if redis_client.sismember("processed_files", file):
+                #     logging.debug(f"Файл {file} уже обработан. Пропускаем.")
+                #     continue
 
                 file_path = os.path.join(root, file)
                 futures.append(executor.submit(process_file, file_path, file, es_client, index_name, redis_client))
@@ -69,34 +69,12 @@ def parse_logs_from_directory(directory, es_client, index_name, redis_client):
         for future in futures:
             future.result()
 
-def extract_dates_from_log(log_content):
-    """Извлекает первую и последнюю дату из содержимого лога в нужном формате."""
-    # Регулярное выражение для извлечения даты и времени в формате 'May 16 02:15:35'
-    date_pattern = r'\w{3} \d{1,2} \d{2}:\d{2}:\d{2}'
-    dates = re.findall(date_pattern, log_content)
-
-    if dates:
-        # Первая дата из лога
-        first_date_str = dates[0]
-        # Последняя дата из лога
-        last_date_str = dates[-1]
-
-        # Преобразуем строки в datetime объекты
-        current_year = datetime.now().year  # Для корректного парсинга в текущий год
-        first_date = datetime.strptime(f"{first_date_str} {current_year}", '%b %d %H:%M:%S %Y')
-        last_date = datetime.strptime(f"{last_date_str} {current_year}", '%b %d %H:%M:%S %Y')
-
-        # Преобразуем datetime в ISO формат
-        first_date_iso = first_date.isoformat()
-        last_date_iso = last_date.isoformat()
-
-        return first_date_iso, last_date_iso
-    return None, None
 
 def process_file(file_path, file, es_client, index_name, redis_client):
     log_content = read_log_from_file(file_path)
     timestamp = datetime.now().isoformat()
     language = "C++"
+
     errors = [
         {"short_name": "composer_error", "full_error": "\n".join(log_content.splitlines()[:3])},
         {"short_name": "rpm_error", "full_error": "\n".join(log_content.splitlines()[:3])},
@@ -105,51 +83,45 @@ def process_file(file_path, file, es_client, index_name, redis_client):
 
     package = truncate_string(file)
     package_info = fetch_package_info(file)
-
-    # Если информация о пакете не найдена, используем заглушку или оставляем пустые значения
     if package_info:
         summary = package_info.get("summary", "Неизвестно")
         description = package_info.get("description", "Описание отсутствует")
         group = package_info.get("group", "Неизвестно")
         depends = package_info.get("depends", {}).get("require", [])
-    else:
-        summary = "Информация о пакете не найдена"
-        description = "Описание отсутствует"
-        group = "Неизвестно"
-        depends = []
 
-    # Извлекаем первую и последнюю даты из лога
-    first_date, last_date = extract_dates_from_log(log_content)
+        document = {
+            "log": log_content,
+            "timestamp": timestamp,
+            "programming_language": language,
+            "errors": errors,
+            "package_field": package,
+            "package_summary": summary,
+            "package_description": description,
+            "package_group": group,
+            "package_dependencies": depends,
+        }
 
-    document = {
-        "log": log_content,
-        "timestamp": timestamp,
-        "programming_language": language,
-        "errors": errors,
-        "package_field": package,
-        "package_summary": summary,
-        "package_description": description,
-        "package_group": group,
-        "package_dependencies": depends,
-        "first_log_date": first_date,  # Первая дата
-        "last_log_date": last_date,    # Последняя дата
-    }
-
-    try:
         es_client.index(index=index_name, document=document)
         logging.debug(f"Отправлен лог из файла: {file_path}")
-    except Exception as e:
-        logging.error(f"Ошибка при отправке документа в Elasticsearch: {e}")
 
-    # Сохраняем название файла в Redis, чтобы избежать повторной обработки
-    redis_client.sadd("processed_files", file)
+        redis_client.sadd("unique_packages", package)
 
-    # Сохраняем уникальные пакеты и ошибки в Redis, даже если не удалось получить информацию о пакете
-    redis_client.sadd("unique_packages", package)  # Сохраняем уникальные пакеты
-    for error in errors:
-        redis_client.sadd("unique_errors", error['short_name'])  # Сохраняем короткие имена ошибок
+        # Сохраняем уникальные ошибки и статистику по ним
+        for error in errors:
+            error_key = f"error:{error['short_name']}"
 
-# Функция для планирования задания
+            # Добавляем ошибку в множество уникальных ошибок
+            redis_client.sadd("unique_errors", error['short_name'])
+
+            # Увеличиваем количество вхождений ошибки
+            redis_client.hincrby(error_key, "count", 1)
+
+            # Добавляем пакет в список пакетов для этой ошибки
+            redis_client.sadd(f"{error_key}:packages", package)
+
+        redis_client.sadd("processed_files", file)
+
+
 def schedule_log_parsing():
     directory_path = os.path.expanduser('~/Desktop/latest/error')
 
@@ -175,8 +147,11 @@ def schedule_log_parsing():
 
     print("Логи успешно отправлены в Elasticsearch.")
 
+
 scheduler = BackgroundScheduler()
+
 scheduler.add_job(schedule_log_parsing, 'cron', hour=0, minute=1, second=0)
+
 schedule_log_parsing()
 
 scheduler.start()
