@@ -45,6 +45,7 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter-web"
     implementation "org.springframework.boot:spring-boot-starter-validation"
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+    implementation 'redis.clients:jedis:4.2.3'
     implementation platform('org.springframework.cloud:spring-cloud-dependencies:2020.0.4')
 
 

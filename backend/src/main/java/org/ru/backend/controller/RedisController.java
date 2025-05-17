@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
 import java.util.Set;
 
 @RestController
@@ -34,8 +35,8 @@ public class RedisController {
             @ApiResponse(responseCode = "400", description = "Неверный параметр ключа (enumKey)"),
             @ApiResponse(responseCode = "404", description = "Не найдено значений по указанному ключу")
     })
-    @GetMapping("/api/uniquePackages")
-    public Set<String> getUniquePackages(
+    @GetMapping("/api/filters")
+    public Set<String> getFilters(
             @RequestParam("enumKey")
             @Parameter(
                     description = "Ключ в Redis, соответствующий значению enumKey",
@@ -55,5 +56,25 @@ public class RedisController {
             e.printStackTrace();
             return null;  // Можно вернуть ошибку или пустой набор
         }
+    }
+
+    /**
+     * Эндпоинт для получения статистики по ошибкам.
+     * Статистика включает:
+     * 1. Количество встреч ошибки.
+     * 2. Список пакетов, в которых эта ошибка встречалась.
+     * @return Статистика по ошибкам.
+     */
+    @Operation(
+            summary = "Получить статистику по ошибкам",
+            description = "Этот эндпоинт позволяет получить статистику по ошибкам, включая количество встреч и список пакетов."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Успешный запрос, возвращены данные по ошибкам"),
+            @ApiResponse(responseCode = "404", description = "Не найдено ошибок в Redis")
+    })
+    @GetMapping("/api/errorStats")
+    public Map<String, Map<String, Object>> getErrorStats() {
+        return redisService.getErrorStats();
     }
 }
