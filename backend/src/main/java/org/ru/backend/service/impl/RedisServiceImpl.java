@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.ru.backend.service.RedisService;
 import org.springframework.stereotype.Service;
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -12,7 +13,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class RedisServiceImpl implements RedisService {
 
-    private final Jedis jedis; // Используем Jedis для доступа к Redis
+    private final JedisPool jedisPool; // Используем JedisPool для управления подключениями к Redis
 
     /**
      * Получение всех значений по ключу из Redis.
@@ -20,7 +21,9 @@ public class RedisServiceImpl implements RedisService {
      * @return Множество значений по ключу.
      */
     public Set<String> getValuesByKey(String key) {
-        return jedis.smembers(key);
+        try (Jedis jedis = jedisPool.getResource()) {
+            return jedis.smembers(key);
+        }
     }
 
     /**
@@ -34,26 +37,28 @@ public class RedisServiceImpl implements RedisService {
         Map<String, Map<String, Object>> errorStats = new HashMap<>();
 
         // Получаем все уникальные ошибки
-        Set<String> errors = jedis.smembers("unique_errors");
+        try (Jedis jedis = jedisPool.getResource()) {
+            Set<String> errors = jedis.smembers("unique_errors");
 
-        // Для каждой ошибки получаем статистику по её встречам и связанным с ней пакетам
-        for (String error : errors) {
-            String errorKey = "error:" + error;
+            // Для каждой ошибки получаем статистику по её встречам и связанным с ней пакетам
+            for (String error : errors) {
+                String errorKey = "error:" + error;
 
-            // Получаем все пакеты, связанные с ошибкой
-            Set<String> packages = jedis.smembers(errorKey + ":packages");
+                // Получаем все пакеты, связанные с ошибкой
+                Set<String> packages = jedis.smembers(errorKey + ":packages");
 
-            // Получаем количество встреч этой ошибки
-            String countStr = jedis.hget(errorKey, "count");
-            int count = countStr != null ? Integer.parseInt(countStr) : 0;
+                // Получаем количество встреч этой ошибки
+                String countStr = jedis.hget(errorKey, "count");
+                int count = countStr != null ? Integer.parseInt(countStr) : 0;
 
-            // Формируем статистику по ошибке
-            Map<String, Object> errorStat = new HashMap<>();
-            errorStat.put("count", count);  // Количество встреч ошибки
-            errorStat.put("packages", packages);  // Список пакетов, где эта ошибка встретилась
+                // Формируем статистику по ошибке
+                Map<String, Object> errorStat = new HashMap<>();
+                errorStat.put("count", count);  // Количество встреч ошибки
+                errorStat.put("packages", packages);  // Список пакетов, где эта ошибка встретилась
 
-            // Добавляем статистику по ошибке в общую карту
-            errorStats.put(error, errorStat);
+                // Добавляем статистику по ошибке в общую карту
+                errorStats.put(error, errorStat);
+            }
         }
 
         // Сортируем ошибки по количеству встреч (count) в порядке убывания

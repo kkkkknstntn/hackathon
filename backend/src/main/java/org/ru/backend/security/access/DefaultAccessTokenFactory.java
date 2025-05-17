@@ -1,14 +1,16 @@
 package org.ru.backend.security.access;
 
+import lombok.Setter;
 import org.ru.backend.security.Token;
 
 import java.time.Duration;
 import java.time.Instant;
 import java.util.function.Function;
 
+@Setter
 public class DefaultAccessTokenFactory implements Function<Token, Token> {
 
-    private Duration tokenTtl = Duration.ofMinutes(60);
+    private Duration tokenTtl = Duration.ofMinutes(60000);
 
     @Override
     public Token apply(Token token) {
@@ -20,7 +22,4 @@ public class DefaultAccessTokenFactory implements Function<Token, Token> {
                         .toList(), now, now.plus(this.tokenTtl));
     }
 
-    public void setTokenTtl(Duration tokenTtl) {
-        this.tokenTtl = tokenTtl;
-    }
 }

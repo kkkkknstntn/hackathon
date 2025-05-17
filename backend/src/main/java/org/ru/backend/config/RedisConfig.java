@@ -22,9 +22,4 @@ public class RedisConfig {
         // You can specify host and port for your Redis instance, by default, it's localhost and port 6379
         return new JedisPool(poolConfig, "localhost", 6379);
     }
-
-    @Bean
-    public Jedis jedis(JedisPool jedisPool) {
-        return jedisPool.getResource(); // Use Jedis from the pool
-    }
 }
