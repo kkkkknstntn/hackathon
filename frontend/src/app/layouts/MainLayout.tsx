@@ -1,7 +1,6 @@
 import { customTheme, darkTheme, lightTheme } from '@/styles/theme'
 import {
   SearchOutlined,
-  FilterOutlined,
   BulbOutlined,
   BulbFilled
 } from '@ant-design/icons'
@@ -20,26 +19,9 @@ const THEMES = {
   custom: customTheme,
 }
 
-const FILTER_OPTIONS = [
-  { label: 'Язык программирования', value: 'language' },
-  { label: 'Пакеты', value: 'packages' },
-  { label: 'Дата ошибки', value: 'date' },
-]
-
 export const MainLayout = ({ children }: MainLayoutProps) => {
   const [currentTheme, setCurrentTheme] = useState<'light' | 'dark' | 'custom'>('light')
-  const [searchQuery, setSearchQuery] = useState('')
-
-  const handleSearch = (value: string) => {
-    console.log('Searching for:', value)
-  }
-
-  const filterMenu: MenuProps = {
-    items: FILTER_OPTIONS.map(option => ({
-      key: option.value,
-      label: option.label,
-    }))
-  }
+  const [] = useState('')
 
   const handleThemeChange = (key: string) => {
     setCurrentTheme(key as 'light' | 'dark' | 'custom')
