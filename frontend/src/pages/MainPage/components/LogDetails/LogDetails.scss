@@ -1,6 +1,5 @@
 .log-details-card {
   height: 100%;
-  min-height: 70vh;
   margin-bottom: 16px;
 
   .ant-card-body {
@@ -10,7 +9,7 @@
   .raw-log {
     padding: 12px;
     border-radius: 4px;
-    max-height: 65vh;
+    max-height: 100vw;
     overflow-y: auto;
     white-space: pre-wrap;
     word-wrap: break-word;
