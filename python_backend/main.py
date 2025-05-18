@@ -198,7 +198,7 @@ def schedule_log_parsing():
     sync_logs()
 
     # Список файлов Jupyter Notebook, которые нужно запустить
-    notebooks = ['notebook.ipynb']  # Замените на свои файлы
+    notebooks = []  # Замените на свои файлы
 
     # Запуск Jupyter Notebook файлов
     run_notebooks(notebooks)
