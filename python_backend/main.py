@@ -1,3 +1,4 @@
+import shutil
 import subprocess
 import os
 import csv
@@ -63,6 +64,11 @@ def save_logs_to_csv(logs_data, output_file="combined_logs.csv"):
 def sync_logs():
     """Синхронизация логов с последующим сбором и сохранением в CSV"""
     try:
+        # Удаляем старую папку error, если она существует
+        if os.path.exists("error"):
+            shutil.rmtree("error")
+            print("Старая версия папки 'error' была удалена.")
+
         # Выполнение команды синхронизации
         subprocess.run(
             ['rsync', '-avp', '--delete-after', 'git.altlinux.org::beehive-logs/Sisyphus-x86_64/latest/error', '.'],
