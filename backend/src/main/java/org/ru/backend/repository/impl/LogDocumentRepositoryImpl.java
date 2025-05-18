@@ -41,6 +41,8 @@ public class LogDocumentRepositoryImpl {
         try {
             SearchResponse<LogDocument> response = elasticsearchClient.search(s -> s
                             .index("logs_index")
+                            .from(0)    // Начать с первого документа
+                            .size(1000)
                             .query(q -> q
                                     .bool(b -> {
                                         // Используем must вместо should для обязательных условий
