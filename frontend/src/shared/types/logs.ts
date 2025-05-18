@@ -32,6 +32,7 @@ export interface SearchLogsParams {
   packageGroup?: string;
   packageSummary?: string;
   log?: string;
-  date?: string; // Формат: YYYY-MM-DD
+  date?: string; 
   limit?: number;
+  exact?: boolean;
 }

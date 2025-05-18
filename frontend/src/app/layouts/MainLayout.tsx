@@ -1,10 +1,10 @@
 import { customTheme, darkTheme, lightTheme } from '@/styles/theme'
 import {
-  SearchOutlined,
   BulbOutlined,
-  BulbFilled
+  BulbFilled, HomeOutlined, BarChartOutlined
 } from '@ant-design/icons'
-import { Button, ConfigProvider, Layout, Input, Dropdown, type MenuProps, Space } from 'antd'
+import { NavLink } from 'react-router-dom';
+import { Button, ConfigProvider, Layout, Dropdown, type MenuProps, Space } from 'antd'
 import { useState, type ReactNode } from 'react'
 import './MainLayout.scss'
 const { Header, Content } = Layout
@@ -42,29 +42,52 @@ export const MainLayout = ({ children }: MainLayoutProps) => {
         <Header className="main-header">
           <div className="header-content">
             <div className="logo-wrapper">
-              <div className="logo-full">Error Logger Analyzer</div>
+              <div className="logo-full">Logcutter</div>
               <div className="logo-compact">
-                <div>Error</div>
-                <div>Logger</div>
-                <div>Analyzer</div>
+                <div>Logcutter</div>
               </div>
             </div>
 
             <Space className="controls-group" size="middle">
-              <Input
+              {/* <Input
                 className="search-input"
                 placeholder="Поиск ошибок"
                 prefix={<SearchOutlined />}
                 size="middle"
                 allowClear
-              />
+              /> */}
               
-              <Dropdown menu={themeMenu} trigger={['click']}>
+              <Space size={8}>
+                <NavLink to="/" end>
+                  {({ isActive }) => (
+                    <Button
+                      type={isActive ? 'default' : 'text'}
+                      className="nav-btn"
+                      icon={<HomeOutlined />}
+                    >
+                      Главная
+                    </Button>
+                  )}
+                </NavLink>
+                <NavLink to="/stats">
+                  {({ isActive }) => (
+                    <Button
+                      type={isActive ? 'default' : 'text'}
+                      className="nav-btn"
+                      icon={<BarChartOutlined />}
+                    >
+                      Статистика
+                    </Button>
+                  )}
+                </NavLink>
+                <Dropdown menu={themeMenu} trigger={['click']}>
                 <Button icon={currentTheme === 'dark' ? <BulbFilled /> : <BulbOutlined />} className="theme-btn">
                   <span className="btn-text">Тема</span>
                 </Button>
               </Dropdown>
+              </Space>
             </Space>
+
           </div>
         </Header>
 
@@ -74,4 +97,5 @@ export const MainLayout = ({ children }: MainLayoutProps) => {
       </Layout>
     </ConfigProvider>
   );
+
 };
