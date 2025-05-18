@@ -9,7 +9,6 @@
 
   .selected-log {
     cursor: pointer;
-    background-color: #fafafa;
   }
   
   .ant-list-item {
@@ -17,10 +16,6 @@
     margin: 0;
     border-bottom: 1px solid var(--ant-color-border);
     transition: background 0.2s;
-
-    &:hover {
-      background-color: #f5f5f5;
-    }
 
     .log-title {
       font-size: clamp(0.9rem, 1.2vw, 1rem);
@@ -59,7 +54,6 @@
   }
   
   .error-collapse {
-    background: transparent;
     
     .error-panel {
       border-bottom: 1px solid #f0f0f0;
@@ -71,7 +65,6 @@
       
       .error-details {
         padding: 8px 16px;
-        background: #fafafa;
         border-radius: 4px;
         
         .full-error-message {
@@ -95,15 +88,7 @@
       padding: 4px 8px;
       border-radius: 4px;
       font-size: 0.85rem;
-      &.ant-tag-red {
-      background-color: #fff1f0;
-      border-color: #ffa39e;
-      color: #cf1322;
       
-      &:hover {
-        background-color: #ffccc7;
-      }
-    }
     }
   }
   

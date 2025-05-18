@@ -10,6 +10,7 @@
 
   .page-title {
     text-align: center;
+    margin-top: 0;
     margin-bottom: 24px !important;
   }
 
@@ -30,12 +31,7 @@
           transition: all 0.3s;
           border-bottom: 1px solid #f0f0f0;
 
-          &:hover {
-            background: #fafafa;
-          }
-
           &.selected {
-            background: #e6f7ff;
             border-right: 3px solid #1890ff;
           }
         }
@@ -57,7 +53,6 @@
             .packages-list {
               max-height: 60vh;
               overflow-y: auto;
-              background: #fafafa;
               padding: 12px;
               border-radius: 4px;
             }

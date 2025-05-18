@@ -7,7 +7,7 @@ import {
   Space, 
   ConfigProvider, 
   Input, 
-  Checkbox 
+  Checkbox, Tooltip
 } from 'antd';
 import { 
   DownOutlined, 
@@ -50,11 +50,15 @@ export const Filters = ({
   const [exactMatch, setExactMatch] = useState(false);
 
   const renderMenuItems = (items: string[], filterType: keyof SearchLogsParams): MenuProps['items'] => 
-    items.map(item => ({
-      key: item,
-      label: item,
-      onClick: () => handleFilterSelect(filterType, item)
-    }));
+  items.map(item => ({
+    key: item,
+    label: (
+      <Tooltip title={item} mouseEnterDelay={0.5}>
+        <span>{truncateText(item)}</span>
+      </Tooltip>
+    ),
+    onClick: () => handleFilterSelect(filterType, item)
+  }));
 
   const handleDateChange = (date: dayjs.Dayjs | null) => {
     handleDateTimeChange(date ? date.format('YYYY-MM-DDTHH:mm:ss') : null);
@@ -68,6 +72,12 @@ export const Filters = ({
   const handleApply = () => {
     handleSearch();
     handleApplyFilters();
+  };
+
+  const truncateText = (text: string, maxLength = 20) => {
+  return text.length > maxLength 
+    ? `${text.substring(0, maxLength)}...` 
+    : text;
   };
 
   return (
@@ -100,7 +110,7 @@ export const Filters = ({
             trigger={['click']}
           >
             <Button className='filter-button'>
-              Ошибки{filters.errors ? `: ${filters.errors}` : ''} <DownOutlined />
+              Ошибки{filters.errors ? `: ${truncateText(filters.errors)}` : ''} <DownOutlined />
             </Button>
           </Dropdown>
 

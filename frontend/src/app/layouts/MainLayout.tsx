@@ -49,36 +49,24 @@ export const MainLayout = ({ children }: MainLayoutProps) => {
             </div>
 
             <Space className="controls-group" size="middle">
-              {/* <Input
-                className="search-input"
-                placeholder="Поиск ошибок"
-                prefix={<SearchOutlined />}
-                size="middle"
-                allowClear
-              /> */}
-              
               <Space size={8}>
                 <NavLink to="/" end>
-                  {({ isActive }) => (
                     <Button
-                      type={isActive ? 'default' : 'text'}
+                      type={'default'}
                       className="nav-btn"
                       icon={<HomeOutlined />}
                     >
                       Главная
                     </Button>
-                  )}
                 </NavLink>
                 <NavLink to="/stats">
-                  {({ isActive }) => (
                     <Button
-                      type={isActive ? 'default' : 'text'}
+                      type={'default'}
                       className="nav-btn"
                       icon={<BarChartOutlined />}
                     >
                       Статистика
                     </Button>
-                  )}
                 </NavLink>
                 <Dropdown menu={themeMenu} trigger={['click']}>
                 <Button icon={currentTheme === 'dark' ? <BulbFilled /> : <BulbOutlined />} className="theme-btn">
