@@ -1,7 +1,7 @@
 {
   "0": {
     "model_summary": " Package 'bzip2', required by 'freetype2', not ... Package bzip2 was not found in the pkg-config . Using default compression for debug info becau... -- Looking for backtrace Problem opening /proc/meminfo .",
-    "deepseek_name": "Bzip2NotFound"
+    "deepseek_name": "CMakeError"
   },
   "1": {
     "model_summary": " Checking for wsncpy... no checking for main in -lXmu... yes Making all in app-defaults In file included from DisplayCAL/RealDisplaySi... + find . -name '*.so' -print -delete . Hunk #5 succeeded at 19537 (offset 52 lines)",

@@ -94,6 +94,29 @@ def fetch_package_info(file_name):
         logging.error(f"Ошибка запроса к API: {e}")
     return None
 
+def extract_dates_from_log(log_content):
+    """Извлекает первую и последнюю дату из содержимого лога в нужном формате."""
+    # Регулярное выражение для извлечения даты и времени в формате 'May 16 02:15:35'
+    date_pattern = r'\w{3} \d{1,2} \d{2}:\d{2}:\d{2}'
+    dates = re.findall(date_pattern, log_content)
+
+    if dates:
+        # Первая дата из лога
+        first_date_str = dates[0]
+        # Последняя дата из лога
+        last_date_str = dates[-1]
+
+        # Преобразуем строки в datetime объекты
+        current_year = datetime.now().year  # Для корректного парсинга в текущий год
+        first_date = datetime.strptime(f"{first_date_str} {current_year}", '%b %d %H:%M:%S %Y')
+        last_date = datetime.strptime(f"{last_date_str} {current_year}", '%b %d %H:%M:%S %Y')
+
+        # Преобразуем datetime в ISO формат
+        first_date_iso = first_date.isoformat()
+        last_date_iso = last_date.isoformat()
+
+        return first_date_iso, last_date_iso
+    return None, None
 
 def process_log_entry(log_entry, chunk_21, json_errors, es_client, index_name, redis_client):
     """Обработка одного лог-записи"""
@@ -141,6 +164,7 @@ def process_log_entry(log_entry, chunk_21, json_errors, es_client, index_name, r
         description = package_info.get("description", "Описание отсутствует")
         group = package_info.get("group", "Неизвестно")
         depends = package_info.get("depends", {}).get("require", [])
+        first_date, last_date = extract_dates_from_log(log_content)
 
         document = {
             "log": log_content,
@@ -152,6 +176,8 @@ def process_log_entry(log_entry, chunk_21, json_errors, es_client, index_name, r
             "package_description": description,
             "package_group": group,
             "package_dependencies": depends,
+            "first_log_date": first_date,  # Первая дата
+            "last_log_date": last_date,    # Последняя дата
         }
 
         # Отправляем лог в Elasticsearch
