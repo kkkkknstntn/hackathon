@@ -132,6 +132,9 @@
           min-width: 120px;
           width: 100%;
           max-width: none;
+          .btn-text {
+            display: none;
+          }
         }
 
         .ant-btn {

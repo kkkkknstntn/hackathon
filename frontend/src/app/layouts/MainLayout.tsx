@@ -56,22 +56,22 @@ export const MainLayout = ({ children }: MainLayoutProps) => {
                       className="nav-btn"
                       icon={<HomeOutlined />}
                     >
-                      Главная
+                      <span className="btn-text">Главная</span>
                     </Button>
-                </NavLink>
-                <NavLink to="/stats">
+                  </NavLink>
+                  <NavLink to="/stats">
                     <Button
                       type={'default'}
                       className="nav-btn"
                       icon={<BarChartOutlined />}
                     >
-                      Статистика
+                      <span className="btn-text">Статистика</span>
                     </Button>
-                </NavLink>
+                  </NavLink>
                 <Dropdown menu={themeMenu} trigger={['click']}>
-                <Button icon={currentTheme === 'dark' ? <BulbFilled /> : <BulbOutlined />} className="theme-btn">
-                  <span className="btn-text">Тема</span>
-                </Button>
+                  <Button icon={currentTheme === 'dark' ? <BulbFilled /> : <BulbOutlined />} className="theme-btn">
+                    <span className="btn-text">Тема</span>
+                  </Button>
               </Dropdown>
               </Space>
             </Space>
