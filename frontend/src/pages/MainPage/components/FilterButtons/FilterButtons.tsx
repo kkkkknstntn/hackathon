@@ -1,9 +1,24 @@
-import { Button, Dropdown, type MenuProps, DatePicker, Space, ConfigProvider } from 'antd';
-import { DownOutlined, CalendarOutlined } from '@ant-design/icons';
+import { useState } from 'react';
+import { 
+  Button, 
+  Dropdown, 
+  type MenuProps, 
+  DatePicker, 
+  Space, 
+  ConfigProvider, 
+  Input, 
+  Checkbox 
+} from 'antd';
+import { 
+  DownOutlined, 
+  CalendarOutlined, 
+  SearchOutlined 
+} from '@ant-design/icons';
 import './FilterButtons.scss';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import type { SearchLogsParams } from '../../../../shared/types/logs';
+import type { CheckboxChangeEvent } from 'antd/es/checkbox';
 
 dayjs.extend(customParseFormat);
 
@@ -16,7 +31,7 @@ interface FiltersProps {
   packages: string[];
   errors: string[];
   toggleFilter: (filter: string) => void;
-  handleFilterSelect: (type: keyof SearchLogsParams, value: string) => void;
+  handleFilterSelect: (type: keyof SearchLogsParams, value: string | boolean) => void;
   handleDateTimeChange: (date: string | null) => void;
   handleApplyFilters: () => void; 
 }
@@ -31,6 +46,9 @@ export const Filters = ({
   handleDateTimeChange,
   handleApplyFilters
 }: FiltersProps) => {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [exactMatch, setExactMatch] = useState(false);
+
   const renderMenuItems = (items: string[], filterType: keyof SearchLogsParams): MenuProps['items'] => 
     items.map(item => ({
       key: item,
@@ -40,6 +58,16 @@ export const Filters = ({
 
   const handleDateChange = (date: dayjs.Dayjs | null) => {
     handleDateTimeChange(date ? date.format('YYYY-MM-DDTHH:mm:ss') : null);
+  };
+
+  const handleSearch = () => {
+    handleFilterSelect('query', searchQuery);
+    handleFilterSelect('exact', exactMatch);
+  };
+
+  const handleApply = () => {
+    handleSearch();
+    handleApplyFilters();
   };
 
   return (
@@ -53,6 +81,7 @@ export const Filters = ({
         }
       }}>
         <Space size={12} wrap>
+
           <Dropdown
             menu={{ items: renderMenuItems(packages, 'packageField') }}
             open={visibleFilters.packages}
@@ -76,8 +105,7 @@ export const Filters = ({
           </Dropdown>
 
           <DatePicker
-            showTime={{ format: 'HH:mm:ss' }}
-            format="YYYY-MM-DD HH:mm:ss"
+            format="YYYY-MM-DD"
             placeholder="Дата и время"
             onChange={handleDateChange}
             suffixIcon={<CalendarOutlined />}
@@ -85,13 +113,31 @@ export const Filters = ({
             allowClear
           />
 
+          <Input
+            placeholder="Поиск ошибок..."
+            prefix={<SearchOutlined />}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onPressEnter={handleSearch}
+            allowClear
+            style={{ width: 250 }}
+          />
+          
+          <Checkbox
+            checked={exactMatch}
+            onChange={(e: CheckboxChangeEvent) => setExactMatch(e.target.checked)}
+          >
+            Точный поиск
+          </Checkbox>
           <Button 
             type="primary" 
-            onClick={handleApplyFilters}
+            onClick={handleApply}
             className='apply-button'
           >
             Применить
           </Button>
+
+          
         </Space>
       </ConfigProvider>
     </div>

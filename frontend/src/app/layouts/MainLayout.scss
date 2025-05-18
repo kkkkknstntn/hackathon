@@ -42,24 +42,27 @@
     }
 
     .controls-group {
-      display: flex;
-      align-items: center;
-      flex-wrap: nowrap;
-      justify-content: flex-end;
-      gap: 8px;
-      flex: 1;
-
-      .search-input {
-        width: 30vw;
-        flex: 1;
-      }
-
       .ant-btn {
-        white-space: nowrap;
+        // Общие стили для всех кнопок
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        transition: all 0.2s;
         
-        .btn-text {
-          display: inline-block;
+        // Стили для кнопок навигации
+        &.nav-btn {
+          padding: 0 12px;
+          border-radius: 4px;
+          background: rgb(255, 255, 255);
+          border-color: rgb(0, 0, 0, 0.3);
+          
+          .anticon {
+            font-size: 16px;
+          }
         }
+      }
+      .theme-btn {
+        padding: 0 12px;
       }
     }
   }

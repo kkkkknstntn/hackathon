@@ -1,6 +1,7 @@
 import { Card, Tabs, Alert, Divider, Typography } from 'antd';
 import './LogDetails.scss';
 import type { LogDocument } from '../../../../shared/types/logs';
+import { useEffect, useState } from 'react';
 
 const { TabPane } = Tabs;
 const { Text } = Typography;
@@ -10,13 +11,21 @@ interface LogDetailsProps {
 }
 
 export const LogDetails = ({ selectedLog }: LogDetailsProps) => {
+  const [currentLog, setCurrentLog] = useState<string>('');
+  
+  useEffect(() => {
+    if (selectedLog) {
+      setCurrentLog(selectedLog.log);
+    }
+  }, [selectedLog]);
+
   if (!selectedLog) return null;
 
   return (
-    <Card className='log-details-card'>
+    <Card className='log-details-card' key={selectedLog.timestamp}>
       <Tabs defaultActiveKey="1">
         <TabPane tab="Сырой лог" key="1">
-          <pre className="raw-log">{selectedLog.log}</pre>
+          <pre className="raw-log">{currentLog}</pre>
         </TabPane>
         <TabPane tab="Анализ" key="2">
           <Alert

@@ -11,6 +11,7 @@ import {
 } from '../../services/logs.service';
 import type { SearchLogsParams, LogDocument } from '../../shared/types/logs';
 import './MainPage.scss';
+import { useErrorsQuery } from '../../services/logs.service';
 
 export const MainPage = () => {
   const [selectedLog, setSelectedLog] = useState<LogDocument | null>(null);
@@ -23,6 +24,7 @@ export const MainPage = () => {
   const [packages, setPackages] = useState<string[]>([]);
   const [errors, setErrors] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
+  const { data: errorNames = [] } = useErrorsQuery();
 
   useEffect(() => {
     const initData = async () => {
@@ -79,13 +81,25 @@ export const MainPage = () => {
     setFilters(prev => ({...prev, date: dateTime || undefined}));
   };
 
-  const handleFilterSelect = (type: keyof SearchLogsParams, value: string) => {
-    const newFilters = {
-      ...filters,
-      [type]: filters[type] === value ? undefined : value
-    };
-    setFilters(newFilters);
-    setVisibleFilters(prev => ({ ...prev, [type]: false }));
+  const handleFilterSelect = (
+    type: keyof SearchLogsParams, 
+    value: string | boolean
+  ) => {
+    const newValue = typeof value === 'boolean' 
+      ? value 
+      : filters[type] === value 
+        ? undefined 
+        : value;
+
+    setFilters(prev => ({
+      ...prev,
+      [type]: newValue
+    }));
+    
+    setVisibleFilters(prev => ({ 
+      ...prev, 
+      [type]: false 
+    }));
   };
 
   const toggleFilter = (filter: string) => {
@@ -117,6 +131,7 @@ export const MainPage = () => {
               logs={logs} 
               selectedLog={selectedLog} 
               handleLogSelect={handleLogSelect} 
+              errorNames={errorNames}
             />
           </Col>
           <Col xs={24} md={12}>
