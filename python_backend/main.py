@@ -1,4 +1,6 @@
+import subprocess
 import os
+import csv
 import logging
 import json
 import pandas as pd
@@ -13,17 +15,67 @@ from concurrent.futures import ThreadPoolExecutor
 
 logging.basicConfig(level=logging.DEBUG)
 
-import subprocess
-import os
 
-# Выполнение запроса через rsync
+def collect_logs_from_errors(directory_path="error"):
+    """Собираем логи из синхронизированной папки errors"""
+    logs_data = []
+    log_counter = 1
+
+    # Проверяем, существует ли папка с логами
+    if not os.path.exists(directory_path):
+        print(f"Папка {directory_path} не найдена.")
+        return logs_data
+
+    # Обрабатываем все файлы в папке errors
+    for filename in os.listdir(directory_path):
+        file_path = os.path.join(directory_path, filename)
+
+        if os.path.isfile(file_path):
+            try:
+                # Пытаемся прочитать файл с разными кодировками
+                with open(file_path, "r", encoding="utf-8") as f:
+                    content = f.read()
+            except UnicodeDecodeError:
+                with open(file_path, "r", encoding="latin-1") as f:
+                    content = f.read()
+
+            # Добавляем логи в список
+            logs_data.append({
+                "log_id": log_counter,
+                "filename": filename,  # Имя файла
+                "log_text": content
+            })
+            log_counter += 1
+
+    return logs_data
+
+
+def save_logs_to_csv(logs_data, output_file="combined_logs.csv"):
+    """Запись собранных логов в CSV файл"""
+    with open(output_file, "w", newline="", encoding="utf-8") as csvfile:
+        fieldnames = ["log_id", "filename", "log_text"]  # Структура таблицы
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+
+        writer.writeheader()
+        writer.writerows(logs_data)
+
+
 def sync_logs():
+    """Синхронизация логов с последующим сбором и сохранением в CSV"""
     try:
         # Выполнение команды синхронизации
         subprocess.run(
             ['rsync', '-avp', '--delete-after', 'git.altlinux.org::beehive-logs/Sisyphus-x86_64/latest/error', '.'],
             check=True)
         print("Синхронизация завершена успешно.")
+
+        # Сбор и сохранение логов в CSV
+        logs_data = collect_logs_from_errors(directory_path="error")
+        if logs_data:
+            save_logs_to_csv(logs_data, output_file="combined_logs.csv")
+            print(f"Объединено {len(logs_data)} логов в файл combined_logs.csv")
+        else:
+            print("Не найдено логов для записи.")
     except subprocess.CalledProcessError as e:
         print(f"Ошибка при синхронизации: {e}")
 
@@ -38,6 +90,7 @@ def run_notebooks(notebook_files):
             print(f"{notebook} выполнен успешно.")
         except subprocess.CalledProcessError as e:
             print(f"Ошибка при запуске {notebook}: {e}")
+
 
 def read_json_errors(json_path):
     """Чтение JSON файла с ошибками для кластеров с проверкой наличия файла"""
@@ -94,6 +147,7 @@ def fetch_package_info(file_name):
         logging.error(f"Ошибка запроса к API: {e}")
     return None
 
+
 def extract_dates_from_log(log_content):
     """Извлекает первую и последнюю дату из содержимого лога в нужном формате."""
     # Регулярное выражение для извлечения даты и времени в формате 'May 16 02:15:35'
@@ -117,6 +171,7 @@ def extract_dates_from_log(log_content):
 
         return first_date_iso, last_date_iso
     return None, None
+
 
 def process_log_entry(log_entry, chunk_21, json_errors, es_client, index_name, redis_client):
     """Обработка одного лог-записи"""
@@ -177,7 +232,7 @@ def process_log_entry(log_entry, chunk_21, json_errors, es_client, index_name, r
             "package_group": group,
             "package_dependencies": depends,
             "first_log_date": first_date,  # Первая дата
-            "last_log_date": last_date,    # Последняя дата
+            "last_log_date": last_date,  # Последняя дата
         }
 
         # Отправляем лог в Elasticsearch
@@ -224,10 +279,16 @@ def schedule_log_parsing():
     sync_logs()
 
     # Список файлов Jupyter Notebook, которые нужно запустить
-    notebooks = []  # Замените на свои файлы
+    notebooks = [
+        "classify_logs_2.ipynb",
+        "generate_embeddings_3.ipynb",
+        "create_clusters_4.ipynb",
+        "generate_cluster_names_5.ipynb"
+    ]
 
     # Запуск Jupyter Notebook файлов
     run_notebooks(notebooks)
+
     # Используем директорию скрипта для определения пути к файлам
     script_dir = os.path.dirname(os.path.abspath(__file__))
     csv_path = os.path.join(script_dir, 'logs_with_labels_with_id.csv')
