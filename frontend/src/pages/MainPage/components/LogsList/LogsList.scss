@@ -118,6 +118,14 @@
         font-size: 0.8rem;
       }
     }
+
+    .dependencies {
+      .dependency-tag {
+        max-width: 160px;
+        font-size: 2.5vw;
+        padding: 3px 6px;
+      }
+    }
   }
 
   @media (max-width: 468px) {
@@ -131,6 +139,25 @@
       .ant-tag {
         font-size: 0.7rem;
       }
+    }
+  }
+}
+
+@media (max-width: 576px) {
+  .dependencies {
+    gap: 6px;
+    
+    .dependency-tag {
+      max-width: 120px;
+      font-size: 0.3vw;
+    }
+  }
+}
+
+@media (max-width: 400px) {
+  .dependencies {
+    .dependency-tag {
+      max-width: 10%;
     }
   }
 }

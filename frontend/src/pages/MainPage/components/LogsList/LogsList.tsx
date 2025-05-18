@@ -139,18 +139,18 @@ export const LogsList = ({
               </Collapse>
 
               <Divider orientation="left">Зависимости</Divider>
-              <div className="dependencies">
-                {selectedLog.package_dependencies.map((dep) => (
-                  <Tag 
-                    key={dep} 
-                    color={hasDependencyError(dep) ? 'red' : 'default'}
-                    className="dependency-tag"
-                  >
-                    {dep}
-                  </Tag>
-                ))}
-              </div>
-
+                <div className="dependencies">
+                  {selectedLog.package_dependencies.map((dep) => (
+                    <Tooltip title={dep} key={dep}>
+                      <Tag 
+                        color={hasDependencyError(dep) ? 'red' : 'default'}
+                        className="dependency-tag"
+                      >
+                        {truncateErrorName(dep, 20)}
+                      </Tag>
+                    </Tooltip>
+                  ))}
+                </div>
               <Divider orientation="left">Информация о пакете</Divider>
               <div className="package-info">
                 <Paragraph>
