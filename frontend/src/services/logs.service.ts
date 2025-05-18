@@ -11,7 +11,7 @@ export const fetchLogs = async (params: SearchLogsParams): Promise<SearchLogsRes
   const backendParams: Record<string, any> = {
     query: params.query,
     programmingLanguage: params.programmingLanguage,
-    errors: Array.isArray(params.errors) ? params.errors.join(',') : undefined,
+    errors: params.errors,
     packageField: params.packageField,
     packageDependencies: params.packageDependencies,
     packageDescription: params.packageDescription,
