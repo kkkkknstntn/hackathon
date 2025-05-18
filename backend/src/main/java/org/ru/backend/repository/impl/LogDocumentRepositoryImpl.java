@@ -64,20 +64,15 @@ public class LogDocumentRepositoryImpl {
                                         }
 
                                         if (errors != null && !errors.isEmpty()) {
+                                            // Фильтрация по полю errors.short_name.keyword
                                             b.must(sh -> sh
-                                                    .nested(n -> n
-                                                            .path("errors")
-                                                            .query(nq -> nq
-                                                                    .bool(bq -> bq
-                                                                            .must(shl -> shl
-                                                                                    .matchPhrase(m -> m
-                                                                                            .field("errors.short_name")
-                                                                                            .query(errors)
-                                                                                    ))
-                                                                    )
-                                                            )
+                                                    .term(m -> m
+                                                            .field("errors.short_name.keyword") // Используем .keyword для точных совпадений
+                                                            .value(errors)
                                                     ));
                                         }
+
+
 
                                         if (packageField != null && !packageField.isEmpty()) {
                                             b.must(sh -> sh

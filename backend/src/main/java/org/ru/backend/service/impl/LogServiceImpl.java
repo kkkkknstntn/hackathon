@@ -46,7 +46,7 @@ public class LogServiceImpl implements LogService {
 
             return new SearchLogsResponseDTO(uniquePackages, logs);
         } catch (Exception e) {
-            log.info(Arrays.toString(e.getStackTrace()));
+            e.printStackTrace();
         }
         return null;
     }
