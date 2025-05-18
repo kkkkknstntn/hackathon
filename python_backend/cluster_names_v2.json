@@ -1,0 +1,258 @@
+{
+  "0": {
+    "model_summary": " Package 'bzip2', required by 'freetype2', not ... Package bzip2 was not found in the pkg-config . Using default compression for debug info becau... -- Looking for backtrace Problem opening /proc/meminfo .",
+    "deepseek_name": "Bzip2NotFound"
+  },
+  "1": {
+    "model_summary": " Checking for wsncpy... no checking for main in -lXmu... yes Making all in app-defaults In file included from DisplayCAL/RealDisplaySi... + find . -name '*.so' -print -delete . Hunk #5 succeeded at 19537 (offset 52 lines)",
+    "deepseek_name": "PatchHunkSuccess"
+  },
+  "2": {
+    "model_summary": " Package 'bzip2', required by 'freetype2', not ... Package bzip2 was not found in the pkg-config . Problem opening /proc/meminfo .",
+    "deepseek_name": "PkgConfigMissing"
+  },
+  "3": {
+    "model_summary": " Hunk #3 succeeded at 3133 (offset 15 lines) Problem opening /proc/meminfo Command exited with non-zero status 1 Bad exit status from /usr/src/tmp/rpm-t... checking dependency style of x86_64-64-alt-Linux-... hsh-rebuild: rebuild of `libgibsonclient-1.0.0... 1097 |    XtCallCallCallbacks (w, XtNscro)",
+    "deepseek_name": "MeminfoAccessError"
+  },
+  "4": {
+    "model_summary": " Package 'bzip2', required by 'freetype2', not ... Package 'Bzip2' required by bzip2, not ... Building for target x86_64 . Problem opening /proc/meminfo .",
+    "deepseek_name": "Bzip2DependencyError"
+  },
+  "5": {
+    "model_summary": " /usr/bin/ranlib libwolv-utils.a 7755 | STBIDEF int stbi_is_16_bit_from_callbac... 7691 | Stbi_info(char const *filen... 5001 | STBI_convert_iphone_png_to... 4557 | STbi_zlib_decode_buffer(cha... 1581 | STBOIDEF void   stbi hdr_to_ldr_gamma(fl... 1559 | STBEIDEF float *stbi_loadf(charconst *f)",
+    "deepseek_name": "RanlibSymbolConflict"
+  },
+  "6": {
+    "model_summary": " /usr/bin/ranlib libLLVMDemangle.a: strncpy(path, filename, MAX_PATH); /liblib libllvmDemangle .a: Strncpy()() is a function that uses a function of value .size() and a function.size() .",
+    "deepseek_name": "StrncpyUsageError"
+  },
+  "7": {
+    "model_summary": " 1516 t = d & (a & c ^ b ^ e)... 1516  t = (d & (c & e ^ f ^ b) ... 1516 = (c ^ e) ... 1488 = c & (h & b ^ a ^ d)... 1496 = a & (f & h ^ g ^ b), 977 = c . 977  = c, (g & e    ^ f^ b) 977 t = c... 977 . = c ... 977 |   . t =  (g) & (g (e) = (e), (e, e, c, b, c & e, b)",
+    "deepseek_name": "BitwiseOpMismatch"
+  },
+  "8": {
+    "model_summary": " Checking for library containing opendir... non... /usr/src/in/srpm/java3d-1.5.2-alt6_15jpp8.src.... 1138 . XtCallCallCallbacks (w, XtNscro... make[2]: *** [Makefile:552: laygram.lo] Error 1 159 .",
+    "deepseek_name": "OpendirLibraryMissing"
+  },
+  "9": {
+    "model_summary": " Compatibility with CMake < 3.5 has been remove . Package 'libidn2', required by 'libcurl', not required by libcurl, not ... 7691 | STBIDEF int stbi_info(char const *filen) error: Bad exit status from /usr/src/tmp/rpm-t...",
+    "deepseek_name": "CMakeCompatibilityRemoved"
+  },
+  "10": {
+    "model_summary": " Built target microtar 4765 | STBTT_DEF void stbtt_FreeSDF( unsigned c... Command exited with non-zero status 1 [  3] Built target imgui_backend -- Performing Test COMPILER_HAS_DEPRECATED_ATTR checking for stdio.h... yes .",
+    "deepseek_name": "NonZeroExitStatus"
+  },
+  "11": {
+    "model_summary": " Building for target x86_64 Hunk #1 succeeded at 889 (offset 2 lines). Hunk . succeeded at 1652 (offset -96 lines). /usr/src/RPM/BUILD/MAven-3.8.8/maven-rebuild: rebuild of `gpm-1.20.1-alt19.1 .",
+    "deepseek_name": "PatchOffsetMismatch"
+  },
+  "12": {
+    "model_summary": " In file included from ../sdl/libretro/compiler... In file . included from /usr/include/stdio.h:970, 139 | static .uint32_t RGBtoXYZ(constuint32 .t ... 107 | BRESULT iocore_attachout(UINT port, IOOU... 6450 | static REG8 IOINPCALL cirrusvga_ifab(UI... 6525)",
+    "deepseek_name": "IncludeFileError"
+  },
+  "13": {
+    "model_summary": " /usr/bin/ranlib libromfs-imhex.a hsh-install: Failed to calculate package file . Command exited with non-zero status 1 [ 10], Built target LLVMDemangle <86>",
+    "deepseek_name": "RomfsBuildFailure"
+  },
+  "14": {
+    "model_summary": " 109 | BRESULT iocore_attachinp(UINT port, IOIN... 474 | static REG8 IOINPCALL ym_i1489(Uint port... 455 | static void IOOUTCALL ymm_o148a(U INT port) In file included from ../io/iocore.h:36, 15 |    OPN_CHMASK   .   oPN_STEREO   = 0x80000... 48 | inst##4( UINT32 src, void *arg) \\",
+    "deepseek_name": "IODeviceError"
+  },
+  "15": {
+    "model_summary": " Linking CXX executable generator-builtin [ 18], Built target imgui_imgui [ 18] Built target romfs_file_packer-diffing 319 | Int32 _hash_size; 319 |    Int32_hash_Size; 319; 317 |  I32_buffer_size, Int32 buffer_ size; 317; Int32  buffer size; Int32  size;  I32  hash size; Ipad size size: Int32 .",
+    "deepseek_name": "HashSizeMismatch"
+  },
+  "16": {
+    "model_summary": " + configure_runstatedir_flags= checking for x86_64-64-alt-linux-gcc option to en... -- Could NOT find BZip2 (missing: BZIP2_LIBRAR)",
+    "deepseek_name": "Bzip2LibraryMissing"
+  },
+  "17": {
+    "model_summary": " Makefile:552: laylex.lo] Error 1 -- Looking for stddef.h - found 82 | static int round(); Problem opening /proc/meminfo Problem opening . 5001 | STBIDEF void stbi_convert_iphone_png_to... [  3] Built target imgui_backend -- Could NOT find BZip2 .",
+    "deepseek_name": "LexBuildError"
+  },
+  "18": {
+    "model_summary": " Linking CXX executable generator-builtin -- Could NOT find ZSTD (missing: ZSTD_LIBRARY ... [ 12] Built target edlib 319 |    Int32 _hash_size; -- Looking for backtrace 262 | STBIWDEF void stbi_flip_vertically_on_wr... Package 'libidn2', required by 'libcurl', not 'libdn2'",
+    "deepseek_name": "ZstdNotFound"
+  },
+  "19": {
+    "model_summary": " Compressing files in /usr/src/tmp/displaycal-b... + find . -name '*.so' -print -delete Splitting links to . aliased files under /{,sbi... / .src/in/srpm/java3d-1.5.2-alt6_15jpp8.src... Command exited with non-zero status . E: Couldn't find package jogl . Failed to calculate package file .",
+    "deepseek_name": "JoglMissing"
+  },
+  "20": {
+    "model_summary": " Using default compression for debug info becau... Problem opening /proc/meminfo . Building for target x86_64 Bad exit status from /usr/src/tmp/rpm-tmp.7472... checking for inet_ntoa... yes .",
+    "deepseek_name": "DebugCompressionFallback"
+  },
+  "21": {
+    "model_summary": " Problem opening /proc/meminfo Command exited with non-zero status 1 -- Could NOT find BZip2 (missing: BZIP2_LIBRAR... -- Could not find ZSTD (missing) ZSTD_Library ... 537 -- removed directory 'lib/third_party/capstone/co... removed directory . 577 -- error: Bad exit status from /usr/src/tmp/rpm-t...",
+    "deepseek_name": "BuildDependencyError"
+  },
+  "22": {
+    "model_summary": " Makefile:62: do-all: Error 1 . Error:   t = h & (e & g ^ f ^ a)... 1596 |    . 1588 | (g & a ^ h ^ c ^ c) = b & (g) & (a & c ^ b ^ e) ... make: *** [Do-all] Error 1: Error: t = (b & (c) & e ^ f^ b) ... Error: T = (c & e & f ^ b) -- Error: H & (b) = (a ^ c + c + e ^ b + c ^ e...",
+    "deepseek_name": "MakefileTargetError"
+  },
+  "23": {
+    "model_summary": " Package 'bzip2', required by 'freetype2', not . Could NOT find LibLZMA (missing: LIBLZMA_LI) Package libidn2 was not found in the pkg-confi .",
+    "deepseek_name": "LibLZMANotFound"
+  },
+  "24": {
+    "model_summary": " Linking CXX executable generator-decomp... removed directory 'lib/third_party/capstone' Building for target x86_64 63 . Built target edlib 1531 | STBIDEF int int    stbi_is_hdr .",
+    "deepseek_name": "DecompressionBuildError"
+  },
+  "25": {
+    "model_summary": " Hunk #4 succeeded at 3272 (offset 15 lines) Checking for minix/config.h... no checking for x86_64-64-alt-linux-gcc option to en... 103 |    .  zx81.romcrc=CRC32Block(memory,ro... 148 | static int soundfd=1; 42 |  . static int phase, fetchdata; .",
+    "deepseek_name": "MinixConfigMissing"
+  },
+  "26": {
+    "model_summary": " CMake Error at CMakeLists.txt:1 (cmake_minimum... checking for stdio.h... yes checking for wcslen... yes . Command exited with non-zero status 1 .",
+    "deepseek_name": "CMakeMinimumVersionError"
+  },
+  "27": {
+    "model_summary": " In file included from /usr/src/RPM/BUILD/imhex... 319 | Int32 _hash_size; [ 12] Built target edlib 317 |    Int32_buffer_size .",
+    "deepseek_name": "HashSizeDeclaration"
+  },
+  "28": {
+    "model_summary": " In file included from DisplayCAL/RealDisplaySi... checking for wcslen... yes make: *** [Makefile:382: all-recursive] Error 1 Hunk #2 succeeded at 812 (offset 45 lines)",
+    "deepseek_name": "WcslenCheckFailed"
+  },
+  "29": {
+    "model_summary": " -- Detecting C compiler ABI info - done -- Looking for stdint.h <86> May 17 05:03:02 groupadd[725678]: group ad... 139: For (i = 0; i < _hash.si... 317: Int32 _buffer_size; 1517 | STBIDEF int stbi_is_is .hdr_from_memory(stb... Problem opening /proc/meminfo Problem opening . /usr/bin/ranlib libromfs-diffing.a 197: If value.size()...",
+    "deepseek_name": "StdintDetectionError"
+  },
+  "30": {
+    "model_summary": " Hunk #1 succeeded at 30 (offset -1 lines). Building for target x86_64 Command exited with non-zero status 1 checking for x86-64-alt-linux-ar... no 1097 |    .   XtCallCallCallbacks (w, XtNscro) make: *** [Makefile:382:382; all-recursive] Error 1 Checking for gethostbyname... yes <86>",
+    "deepseek_name": "PatchOffsetNegative"
+  },
+  "31": {
+    "model_summary": " Compatibility with CMake < 3.5 has been removed . In file included from ../i386c/cpucore.h:4, 132 | static REG8 IOINPCALL srnf_i51ee(UINT po... 489) return(Data); Command exited with non-zero status .",
+    "deepseek_name": "CPUCoreIncludeError"
+  },
+  "32": {
+    "model_summary": " XtCallCallbacks (w, XtNscro... Compatibility with CMake < 3.5 has been remove) Checking for suffix of object files... o checking for mt... no checking for wscpy... no 1134 . Checking for wslen... no 1117 .",
+    "deepseek_name": "ObjectSuffixMismatch"
+  },
+  "33": {
+    "model_summary": " 236 | static const char* ImGui_ImplGlfw_GetCli... 7755 | STBIDEF int stbi_is_16_bit_from_callbac... 7748 | Stbi_set_unpremultiply_on_... 5001 | STbi_convert_iphone_png_to... 4996 | STbideF void stbi .set_unsatisfactory_data(char const *filen)",
+    "deepseek_name": "ImageFormatError"
+  },
+  "34": {
+    "model_summary": " hsh-rebuild: rebuild of `manaworld-0.5.2-alt5_... Command exited with non-zero status 1 CMake Error at CMakeLists.txt:1 .",
+    "deepseek_name": "ManaworldRebuildFail"
+  },
+  "35": {
+    "model_summary": " -- Looking for stdint.h - found make[2]: *** [Makefile:552: XawIm.lo] Error 1 removed directory 'lib/third_party/capstone/co... Package 'libidn2', required by 'libcurl', not ... checking for main in -lXext... yes <86>",
+    "deepseek_name": "XawImBuildError"
+  },
+  "36": {
+    "model_summary": " No checking for library containing strerror... no... checking for C compiler default output file na . No checking command to parse /usr/bin/nm -B outpu . Checking for x86_64-64-alt-Linux-gcc option to en... no checking for libraries containing strersrror .",
+    "deepseek_name": "StrerrorLibraryMissing"
+  },
+  "37": {
+    "model_summary": " CMake < 3.5 has been remove... removed directory 'lib/third_party/capstone/co... -- Configuring incomplete, errors occurred! Bad exit status from /usr/src/tmp/rpm-tmp.1453 ... Command exited with non-zero status 1 Building for target x86_64 hsh-rebuild: rebuild of `displaycal-3.9.14-alt... Command exited .",
+    "deepseek_name": "ConfigIncompleteError"
+  },
+  "38": {
+    "model_summary": " Problem opening /proc/meminfo -- Looking for backtrace - found Package 'bzip2', required by 'freetype2', not ... [  8] Built target imgui_cimgui 262 | STBIWDEF void stbi_flip_vertically_on_wr... 319 | Int32 _hash_size; 2512 |    . Auto selectionEnd = editor->mSt... 219 |  . (value.size())",
+    "deepseek_name": "BacktraceFound"
+  },
+  "39": {
+    "model_summary": " iocore_attachout(0x40E1... 94 - 94 -    - Value& operator= (Hex in) throw(W) 109 - BRESULT iocores_attachinp(UINT port, IOIN... /usr/src/RPM/BUILD/maven-common-artifact-filte...",
+    "deepseek_name": "HexAssignmentError"
+  },
+  "40": {
+    "model_summary": " Command exited with non-zero status 1 Hunk #3 succeeded at 3133 (offset 15 lines). Problem opening /proc/meminfo Hunk . #5 succeeded at 19537 (offset 52 lines). + find . -name '*.so' -print -delete .",
+    "deepseek_name": "PatchMultiOffset"
+  },
+  "41": {
+    "model_summary": " Compatibility with CMake < 3.5 has been removed... Building for target x86_64 . Problem opening /proc/meminfo CMake Error at CMakeLists.txt:1 (cmake_minimum... <86>May 17 05:02:38 groupadd[665616]: group ad... Package 'libidn2', required by 'libcurl', not ... Package required by libcurl, not ...",
+    "deepseek_name": "GroupAddError"
+  },
+  "42": {
+    "model_summary": " Problem opening /proc/meminfo: Package libidn2 was not found in the pkg-confi... -- Looking for backtrace: Looking for stddef.h Package 'libid n2', required by 'libcurl', not ... Problem opening . /proc/. -- looking for back trace: Found .",
+    "deepseek_name": "PkgConfigPathError"
+  },
+  "43": {
+    "model_summary": " Built target imgui_imgui 5001 | STBIDEF void stbi_convert_iphone_png_to... Building for target x86_64 removed directory 'lib/third_party/capstone/in... <86>",
+    "deepseek_name": "CapstoneRemoved"
+  },
+  "44": {
+    "model_summary": " Hunk #2 succeeded at 812 (offset 45 lines) Building for target x86_64 4557 | STBIDEF int stbi_zlib_decode_buffer(cha... removed directory 'lib/third_party/capstone' 1576 | STbi_ldr_to_hdr_scale(fl... to the PKG_CONFIG_PATH environment variable .",
+    "deepseek_name": "ZlibDecodeError"
+  },
+  "45": {
+    "model_summary": " Checking for unistd.h... yes checking for library containing opendir... non... checking for widec... no Making all in neXtaw 724 |    unsigned long interval; <86>",
+    "deepseek_name": "UnistdCheckPassed"
+  },
+  "46": {
+    "model_summary": " CMake Error at CMakeLists.txt:1 (CMAKE_MINIMUM... error: Bad exit status from /usr/src/tmp/rpm-t... Building atari800... checking for pid_t... yes checking for mbtowc ... checking for x86_64-64-alt-linux-gcc option to en... Making all in neXtaw .",
+    "deepseek_name": "AtariBuildError"
+  },
+  "47": {
+    "model_summary": " hsh-install: Failed to generate package file l... /usr/src/in/srpm/java3d-1.5.2-alt6_15jpp8.src... Command exited with non-zero status 1 Building for target x86_64 -- backtrace facility detected in default set .",
+    "deepseek_name": "PackageFileGenerationFail"
+  },
+  "48": {
+    "model_summary": " hsh-rebuild: rebuild of `libneXtaw-0.15.1-alt8... Building for target x86_64 . error: Bad exit status from /usr/src/tmp/rpm-t... Hunk #2 succeeded at 588 (offset 4 lines). Hunk . succeeded at 812 (offset 45 lines) Command exited with non-zero status .",
+    "deepseek_name": "LibneXtawRebuildFail"
+  },
+  "49": {
+    "model_summary": " Checking for x86_64-64-alt-Linux-file... no checking for dlltool... no . checking for . dll tool... no. checking for X86_32-alt .alt-linux-file . Command exited with non-zero status 1 1138 |    (void) tmpnam(src->multi_sr... make[1]: *** [Makefile:352: all-recursive] Err... -- Configuring incomplete, errors occurred! Checking for C compiler default output file na... checking for C .",
+    "deepseek_name": "DlltoolMissing"
+  },
+  "50": {
+    "model_summary": " Compatibility with CMake < 3.5 has been removed . Command exited with non-zero status 1 + export lt_cv_deplibs_check_method=pass_all .",
+    "deepseek_name": "PassAllDeplibs"
+  },
+  "51": {
+    "model_summary": " checking for dlltool... no checking for x86_64-alt-Linux-ranlib... no . checking for . main in -lXmu... yes checking for main in . -lYmu . Building for target x86 .64 Building for . target x64 .",
+    "deepseek_name": "XmuLibraryFound"
+  },
+  "52": {
+    "model_summary": " Alloca.h... yes . Hunk #1 succeeded at 679 (offset -23 lines). Hunk . succeeded at 1229 (offset 34 lines) Hunk. succeeded at 2012 (offset . -96 lines)",
+    "deepseek_name": "AllocaCheckPassed"
+  },
+  "53": {
+    "model_summary": " Package libidn2 was not found in the pkg-confi... to the PKG_CONFIG_PATH environment variable . Problem opening /proc/meminfo .",
+    "deepseek_name": "EnvironmentVariableMissing"
+  },
+  "54": {
+    "model_summary": " Hunk #1 succeeded at 1229 (offset 34 lines) checking for unistd.h... yes checking for x86_64-alt-alt . Linux-gcc option to en... checking for minix/config.h ... no checking for suffix of object files... o checking for . C compiler default output file na... + export lt_cv_deplibs_check_method=pass_all .",
+    "deepseek_name": "UnistdCheckSuccess"
+  },
+  "55": {
+    "model_summary": " CMake < 3.5 has been removed . Package 'libidn2', required by 'libcurl', not ... Package required by libcurl, not ...",
+    "deepseek_name": "LibcurlDependencyError"
+  },
+  "56": {
+    "model_summary": " Built target microtar 1524 |    . (build/build/maven-3.8.8) / /usr/src/RPM/BUILD/Apennan/MAven-re... /libidn2 is required by 'libcurl', required by libcurl, not 'liblibn2', not ... ... ... . (libs, 1, len, h, h; s, 1; s; h; c; s: OPN_CHMASK; t: b & (g & a ^ h ^ c)... + configure_runstatedir_flags= 1048; . (s) fread(s; len, s; 1; h); . (h; s)",
+    "deepseek_name": "MavenBuildError"
+  },
+  "57": {
+    "model_summary": " /usr/src/RPM/BUILD/MAven-3.8.8/maven-re... checking for pthread_create in -lpthread... yes . OPN_CHMASK is 0x80000; make[1]: [Makefile:79: .depend] Error 1 (ignored)",
+    "deepseek_name": "PthreadCreateSuccess"
+  },
+  "58": {
+    "model_summary": " Checking for stdlib.h... yes checking for shmat... yes . checking for main in -lXmu... yes 1033 |    . (void) tmpnam(src->ascii_sr... 1117 | XtCallCallCallbacks (w, XtNscro) ex... make[2]: *** [Makefile:552: XawIm.lo] Error 1 Bad exit status from /usr/src/tmp/rpm-tmp.564 ... Building for target x86_64 .",
+    "deepseek_name": "ShmatLibraryFound"
+  },
+  "59": {
+    "model_summary": " In file included from /usr/include//python3.12/... -- Configuring incomplete, errors occurred! Hunk #1 succeeded at 1372 (offset 17 lines). Hunk . succeeded at 3133 (offset 15 lines) Hunk. #5 succeeded at 19537 (offset 52 lines).",
+    "deepseek_name": "PythonIncludeError"
+  },
+  "60": {
+    "model_summary": " Package 'bzip2', required by 'freetype2', not ... Package bzip2 was not found in the pkg-config . Problem opening /proc/meminfo to the PKG_CONFIG_PATH environment variable 1097 . XtCallCallCallbacks (w, XtNscro... Making all in app-defaults .",
+    "deepseek_name": "AppDefaultsBuildError"
+  },
+  "61": {
+    "model_summary": " Check for main in -lXmu... yes Package 'libidn2', required by 'libcurl', not ... Package required by libcurl, not ... Checking for x86_64-64-alt-Linux-mt... no checking for wslen... no 1068 |    XtCallCallCallbacks (w, XtNscro... -- Detecting C compiler ABI info - done make[2]: *** [Makefile:552:552]] Error 1 checking for main . in . -lZmu... no . checking for connect... yes checking for dlltool... no",
+    "deepseek_name": "XmuCheckPassed"
+  },
+  "62": {
+    "model_summary": " Group ad... to the PKG_CONFIG_PATH environment variable -- Performing Test COMPILER_HAS_DEPRECATED_ATTR -- Check for working CXX compiler: /usr/bin/c+ .",
+    "deepseek_name": "DeprecatedAttrTest"
+  },
+  "63": {
+    "model_summary": " Built target imgui_implot3d /usr/bin/ranlib libminiaudio.a / .src/RPM/BUILD/maven-3.8.8 . Built target libromfs-script_loader .",
+    "deepseek_name": "MiniaudioBuilt"
+  }
+}

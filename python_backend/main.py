@@ -113,17 +113,17 @@ def process_log_entry(log_entry, chunk_21, json_errors, es_client, index_name, r
 
     # Перебираем все ошибки для этого log_id
     for _, error_row in errors_for_log.iterrows():
-        full_error = error_row['text']  # Сообщение ошибки из chunk_21
+        full_error = error_row['error_text']  # Сообщение ошибки из chunk_21
         cluster_id = error_row['cluster']  # Идентификатор кластера из chunk_21
 
         # Ищем описание ошибки в json_errors по id_cluster
         summary = "Неизвестно"
 
         # Перебираем json_errors (который является списком объектов)
-        for error_obj in json_errors:
-            if error_obj['id_cluster'] == str(cluster_id):
-                # Получаем первую запись из summaries для этого кластера
-                summary = next(iter(error_obj['summaries'].values()), "Неизвестно")
+        for key, error_obj in json_errors.items():
+            if key == str(
+                    cluster_id):  # Compare the key (string representation of the cluster_id) to the current cluster_id
+                summary = error_obj['deepseek_name']
                 break
 
         # Добавляем ошибку
@@ -205,8 +205,9 @@ def schedule_log_parsing():
     # Используем директорию скрипта для определения пути к файлам
     script_dir = os.path.dirname(os.path.abspath(__file__))
     csv_path = os.path.join(script_dir, 'logs_with_labels_with_id.csv')
-    chunk_21_path = os.path.join(script_dir, 'chunk_21.csv')
-    json_errors = read_json_errors(os.path.join(script_dir, 'summarized_results.json'))
+    chunk_21_path = os.path.join(script_dir, 'longformer_hdbscan_clusters.csv')
+    json_errors = read_json_errors(os.path.join(script_dir, 'cluster_names_v2.json'))
+    print(json_errors)
 
     es_client = Elasticsearch(
         ["http://localhost:9200"],
