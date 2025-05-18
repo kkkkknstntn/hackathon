@@ -53,7 +53,6 @@
         &.nav-btn {
           padding: 0 12px;
           border-radius: 4px;
-          background: rgb(255, 255, 255);
           border-color: rgb(0, 0, 0, 0.3);
           
           .anticon {
@@ -133,6 +132,9 @@
           min-width: 120px;
           width: 100%;
           max-width: none;
+          .btn-text {
+            display: none;
+          }
         }
 
         .ant-btn {

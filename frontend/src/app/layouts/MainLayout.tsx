@@ -49,41 +49,29 @@ export const MainLayout = ({ children }: MainLayoutProps) => {
             </div>
 
             <Space className="controls-group" size="middle">
-              {/* <Input
-                className="search-input"
-                placeholder="Поиск ошибок"
-                prefix={<SearchOutlined />}
-                size="middle"
-                allowClear
-              /> */}
-              
               <Space size={8}>
                 <NavLink to="/" end>
-                  {({ isActive }) => (
                     <Button
-                      type={isActive ? 'default' : 'text'}
+                      type={'default'}
                       className="nav-btn"
                       icon={<HomeOutlined />}
                     >
-                      Главная
+                      <span className="btn-text">Главная</span>
                     </Button>
-                  )}
-                </NavLink>
-                <NavLink to="/stats">
-                  {({ isActive }) => (
+                  </NavLink>
+                  <NavLink to="/stats">
                     <Button
-                      type={isActive ? 'default' : 'text'}
+                      type={'default'}
                       className="nav-btn"
                       icon={<BarChartOutlined />}
                     >
-                      Статистика
+                      <span className="btn-text">Статистика</span>
                     </Button>
-                  )}
-                </NavLink>
+                  </NavLink>
                 <Dropdown menu={themeMenu} trigger={['click']}>
-                <Button icon={currentTheme === 'dark' ? <BulbFilled /> : <BulbOutlined />} className="theme-btn">
-                  <span className="btn-text">Тема</span>
-                </Button>
+                  <Button icon={currentTheme === 'dark' ? <BulbFilled /> : <BulbOutlined />} className="theme-btn">
+                    <span className="btn-text">Тема</span>
+                  </Button>
               </Dropdown>
               </Space>
             </Space>
